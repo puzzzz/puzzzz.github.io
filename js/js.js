@@ -6,7 +6,7 @@ new Valine({
     el: '#vcomments',
     appId: valine_appid,
     appKey: valine_appKey,
-    placeholder: '请输入内容...',
+    placeholder: '随便说点什么吧~',
     avatar: "wavatar"
 })
 
