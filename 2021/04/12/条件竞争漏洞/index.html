@@ -43,10 +43,10 @@
 <li>并发流访问同一对象</li>
 <li>至少有一个控制流会改变竞争对象的状态</li>
 </ul>
-<p> <img src="./img/%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%E6%BC%8F%E6%B4%9E/time_interval.png" alt="time_interval"></p>
+<p> <img src="/img/%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%E6%BC%8F%E6%B4%9E/time_interval.png" alt="time_interval"></p>
 <p>程序首先执行action1，然后执行action2，正常流程是程序在执行action2时，action1所产生的条件仍然是满足的。<br>但是由于程序的并发性，攻击者很有可能可以在<strong>action2 执行之前的这个短暂的时间差中破坏 action1 所产生的条件</strong>。这时候攻击者的操作与 action2 产生了条件竞争，所以可能会影响程序的执行效果。</p>
 <h4 id="4、案例"><a href="#4、案例" class="headerlink" title="4、案例"></a>4、案例</h4><p><strong>TOCTOU</strong> (Time-of-check Time-of-use) 指的是程序在使用资源（变量，内存，文件）前会对进行检查，但是在程序使用对应的资源前，该资源却被修改了。</p>
-<p> <img src="./img/%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%E6%BC%8F%E6%B4%9E/toctou.png" alt="toctou"></p>
+<p> <img src="/img/%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%E6%BC%8F%E6%B4%9E/toctou.png" alt="toctou"></p>
 <h3 id="Race-Condition-Enabling-Link-Following"><a href="#Race-Condition-Enabling-Link-Following" class="headerlink" title="Race Condition Enabling Link Following"></a>Race Condition Enabling Link Following</h3><p><em>Linux 中提供了两种对于文件的命名方式</em></p>
 <ul>
 <li><em>文件路径名</em></li>
